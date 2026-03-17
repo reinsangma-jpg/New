@@ -1,0 +1,627 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FinanceFlow - Personal Finance Manager</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <!-- Background Blobs for Liquid Effect -->
+    <div class="background-blobs">
+        <div class="blob blob-1"></div>
+        <div class="blob blob-2"></div>
+        <div class="blob blob-3"></div>
+        <div class="blob blob-4"></div>
+    </div>
+
+    <!-- Navigation -->
+    <nav class="glass-nav">
+        <div class="nav-brand">
+            <i class="fas fa-wallet"></i>
+            <span>FinanceFlow</span>
+        </div>
+        <div class="nav-tabs">
+            <button class="nav-tab active" data-tab="dashboard">
+                <i class="fas fa-chart-pie"></i>
+                <span>Dashboard</span>
+            </button>
+            <button class="nav-tab" data-tab="transactions">
+                <i class="fas fa-exchange-alt"></i>
+                <span>Transactions</span>
+            </button>
+            <button class="nav-tab" data-tab="accounts">
+                <i class="fas fa-university"></i>
+                <span>Accounts</span>
+            </button>
+            <button class="nav-tab" data-tab="investments">
+                <i class="fas fa-chart-line"></i>
+                <span>Investments</span>
+            </button>
+            <button class="nav-tab" data-tab="assets">
+                <i class="fas fa-coins"></i>
+                <span>Assets</span>
+            </button>
+        </div>
+        <div class="nav-actions">
+            <button class="theme-toggle" id="themeToggle">
+                <i class="fas fa-moon"></i>
+            </button>
+            <a href="about.html" class="nav-link">
+                <i class="fas fa-user"></i>
+            </a>
+            <a href="terms.html" class="nav-link">
+                <i class="fas fa-file-contract"></i>
+            </a>
+        </div>
+    </nav>
+
+    <!-- Mobile Navigation -->
+    <nav class="mobile-nav glass-card">
+        <button class="mobile-tab active" data-tab="dashboard">
+            <i class="fas fa-chart-pie"></i>
+            <span>Home</span>
+        </button>
+        <button class="mobile-tab" data-tab="transactions">
+            <i class="fas fa-exchange-alt"></i>
+            <span>Trans</span>
+        </button>
+        <button class="mobile-tab" data-tab="accounts">
+            <i class="fas fa-university"></i>
+            <span>Accounts</span>
+        </button>
+        <button class="mobile-tab" data-tab="investments">
+            <i class="fas fa-chart-line"></i>
+            <span>Invest</span>
+        </button>
+        <button class="mobile-tab" data-tab="assets">
+            <i class="fas fa-coins"></i>
+            <span>Assets</span>
+        </button>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Dashboard Section -->
+        <section class="tab-content active" id="dashboard">
+            <div class="section-header">
+                <h1><i class="fas fa-chart-pie"></i> Dashboard</h1>
+                <p>Your financial overview at a glance</p>
+            </div>
+            
+            <!-- Balance Cards -->
+            <div class="balance-grid">
+                <div class="balance-card glass-card cash-card">
+                    <div class="card-icon">
+                        <i class="fas fa-money-bill-wave"></i>
+                    </div>
+                    <div class="card-content">
+                        <span class="card-label">Cash Balance</span>
+                        <span class="card-value" id="cashBalance">₹0.00</span>
+                    </div>
+                    <div class="card-trend positive">
+                        <i class="fas fa-arrow-up"></i> 2.5%
+                    </div>
+                </div>
+                
+                <div class="balance-card glass-card bank-card">
+                    <div class="card-icon">
+                        <i class="fas fa-university"></i>
+                    </div>
+                    <div class="card-content">
+                        <span class="card-label">Bank Balance</span>
+                        <span class="card-value" id="bankBalance">₹0.00</span>
+                    </div>
+                    <div class="card-trend positive">
+                        <i class="fas fa-arrow-up"></i> 2.5%/yr
+                    </div>
+                </div>
+                
+                <div class="balance-card glass-card demat-card">
+                    <div class="card-icon">
+                        <i class="fas fa-chart-line"></i>
+                    </div>
+                    <div class="card-content">
+                        <span class="card-label">Demat Value</span>
+                        <span class="card-value" id="dematBalance">₹0.00</span>
+                    </div>
+                    <div class="card-trend" id="dematTrend">
+                        <i class="fas fa-minus"></i> 0%
+                    </div>
+                </div>
+                
+                <div class="balance-card glass-card networth-card">
+                    <div class="card-icon">
+                        <i class="fas fa-crown"></i>
+                    </div>
+                    <div class="card-content">
+                        <span class="card-label">Net Worth</span>
+                        <span class="card-value" id="netWorth">₹0.00</span>
+                    </div>
+                    <div class="card-trend positive">
+                        <i class="fas fa-chart-line"></i> Total
+                    </div>
+                </div>
+            </div>
+
+            <!-- Charts Section -->
+            <div class="charts-grid">
+                <div class="chart-card glass-card">
+                    <h3><i class="fas fa-balance-scale"></i> Income vs Expense</h3>
+                    <canvas id="incomeExpenseChart"></canvas>
+                </div>
+                <div class="chart-card glass-card">
+                    <h3><i class="fas fa-calendar-alt"></i> Monthly Trends</h3>
+                    <canvas id="monthlyTrendChart"></canvas>
+                </div>
+                <div class="chart-card glass-card">
+                    <h3><i class="fas fa-seedling"></i> Investment Growth</h3>
+                    <canvas id="investmentGrowthChart"></canvas>
+                </div>
+                <div class="chart-card glass-card">
+                    <h3><i class="fas fa-percent"></i> Interest Projection</h3>
+                    <canvas id="interestProjectionChart"></canvas>
+                </div>
+            </div>
+
+            <!-- Recent Transactions -->
+            <div class="recent-section glass-card">
+                <h3><i class="fas fa-history"></i> Recent Transactions</h3>
+                <div class="recent-list" id="recentTransactions">
+                    <p class="empty-state">No transactions yet</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Transactions Section -->
+        <section class="tab-content" id="transactions">
+            <div class="section-header">
+                <h1><i class="fas fa-exchange-alt"></i> Transactions</h1>
+                <p>Manage your income and expenses</p>
+            </div>
+
+            <!-- Add Transaction Form -->
+            <div class="form-card glass-card">
+                <h3><i class="fas fa-plus-circle"></i> Add Transaction</h3>
+                <form id="transactionForm">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label><i class="fas fa-tag"></i> Type</label>
+                            <select id="transType" required>
+                                <option value="income">Income</option>
+                                <option value="expense">Expense</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label><i class="fas fa-rupee-sign"></i> Amount</label>
+                            <input type="number" id="transAmount" placeholder="0.00" required min="0" step="0.01">
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label><i class="fas fa-calendar"></i> Date</label>
+                            <input type="date" id="transDate" required>
+                        </div>
+                        <div class="form-group">
+                            <label><i class="fas fa-wallet"></i> Account</label>
+                            <select id="transAccount" required>
+                                <option value="cash">Cash</option>
+                                <option value="bank">Bank</option>
+                                <option value="demat">Demat</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label><i class="fas fa-folder"></i> Category</label>
+                            <select id="transCategory" required>
+                                <option value="salary">Salary</option>
+                                <option value="freelance">Freelance</option>
+                                <option value="investment">Investment</option>
+                                <option value="food">Food & Dining</option>
+                                <option value="shopping">Shopping</option>
+                                <option value="upi">UPI Payment</option>
+                                <option value="bills">Bills & Utilities</option>
+                                <option value="transport">Transport</option>
+                                <option value="entertainment">Entertainment</option>
+                                <option value="health">Health</option>
+                                <option value="demat_buy">Demat Buy</option>
+                                <option value="demat_sell">Demat Sell</option>
+                                <option value="other">Other</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label><i class="fas fa-sticky-note"></i> Notes</label>
+                            <input type="text" id="transNotes" placeholder="Optional notes...">
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-plus"></i> Add Transaction
+                    </button>
+                </form>
+            </div>
+
+            <!-- Filters & Actions -->
+            <div class="filters-card glass-card">
+                <div class="filter-row">
+                    <div class="form-group">
+                        <label><i class="fas fa-filter"></i> Filter by Date</label>
+                        <input type="month" id="filterMonth">
+                    </div>
+                    <div class="form-group">
+                        <label><i class="fas fa-search"></i> Search</label>
+                        <input type="text" id="searchTrans" placeholder="Search transactions...">
+                    </div>
+                </div>
+                <div class="action-buttons">
+                    <button class="btn btn-secondary" id="exportCSV">
+                        <i class="fas fa-file-csv"></i> Export CSV
+                    </button>
+                    <button class="btn btn-secondary" id="backupData">
+                        <i class="fas fa-download"></i> Backup JSON
+                    </button>
+                    <label class="btn btn-secondary">
+                        <i class="fas fa-upload"></i> Restore
+                        <input type="file" id="restoreData" accept=".json" hidden>
+                    </label>
+                </div>
+            </div>
+
+            <!-- Transaction List -->
+            <div class="list-card glass-card">
+                <h3><i class="fas fa-list"></i> Transaction History</h3>
+                <div class="transaction-list" id="transactionList">
+                    <p class="empty-state">No transactions recorded</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Accounts Section -->
+        <section class="tab-content" id="accounts">
+            <div class="section-header">
+                <h1><i class="fas fa-university"></i> Accounts</h1>
+                <p>Manage your accounts and transfers</p>
+            </div>
+
+            <!-- Account Cards -->
+            <div class="accounts-grid">
+                <div class="account-card glass-card">
+                    <div class="account-header cash-header">
+                        <i class="fas fa-money-bill-wave"></i>
+                        <h3>Cash Account</h3>
+                    </div>
+                    <div class="account-balance">
+                        <span class="balance-label">Available Balance</span>
+                        <span class="balance-amount" id="cashAccountBalance">₹0.00</span>
+                    </div>
+                    <div class="account-actions">
+                        <button class="btn btn-sm" onclick="quickDeposit('cash')">
+                            <i class="fas fa-plus"></i> Add
+                        </button>
+                        <button class="btn btn-sm btn-outline" onclick="quickWithdraw('cash')">
+                            <i class="fas fa-minus"></i> Withdraw
+                        </button>
+                    </div>
+                </div>
+
+                <div class="account-card glass-card">
+                    <div class="account-header bank-header">
+                        <i class="fas fa-university"></i>
+                        <h3>Bank Account</h3>
+                    </div>
+                    <div class="account-balance">
+                        <span class="balance-label">Available Balance</span>
+                        <span class="balance-amount" id="bankAccountBalance">₹0.00</span>
+                    </div>
+                    <div class="interest-info">
+                        <i class="fas fa-percentage"></i> 2.5% yearly interest
+                    </div>
+                    <div class="account-actions">
+                        <button class="btn btn-sm" onclick="quickDeposit('bank')">
+                            <i class="fas fa-plus"></i> Deposit
+                        </button>
+                        <button class="btn btn-sm btn-outline" onclick="quickWithdraw('bank')">
+                            <i class="fas fa-minus"></i> Withdraw
+                        </button>
+                    </div>
+                </div>
+
+                <div class="account-card glass-card">
+                    <div class="account-header demat-header">
+                        <i class="fas fa-chart-line"></i>
+                        <h3>Demat Account</h3>
+                    </div>
+                    <div class="account-balance">
+                        <span class="balance-label">Portfolio Value</span>
+                        <span class="balance-amount" id="dematAccountBalance">₹0.00</span>
+                    </div>
+                    <div class="profit-loss" id="dematProfitLoss">
+                        <span>P/L: ₹0.00</span>
+                    </div>
+                    <div class="account-actions">
+                        <button class="btn btn-sm" onclick="showTab('investments')">
+                            <i class="fas fa-eye"></i> View Stocks
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Transfer Section -->
+            <div class="transfer-card glass-card">
+                <h3><i class="fas fa-exchange-alt"></i> Transfer Between Accounts</h3>
+                <form id="transferForm">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label><i class="fas fa-arrow-right"></i> From Account</label>
+                            <select id="transferFrom" required>
+                                <option value="cash">Cash</option>
+                                <option value="bank">Bank</option>
+                                <option value="demat">Demat</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label><i class="fas fa-arrow-left"></i> To Account</label>
+                            <select id="transferTo" required>
+                                <option value="bank">Bank</option>
+                                <option value="cash">Cash</option>
+                                <option value="demat">Demat</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label><i class="fas fa-rupee-sign"></i> Amount</label>
+                            <input type="number" id="transferAmount" placeholder="0.00" required min="0" step="0.01">
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-paper-plane"></i> Transfer
+                    </button>
+                </form>
+            </div>
+
+            <!-- Transfer History -->
+            <div class="list-card glass-card">
+                <h3><i class="fas fa-history"></i> Transfer History</h3>
+                <div class="transfer-list" id="transferList">
+                    <p class="empty-state">No transfers yet</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Investments Section -->
+        <section class="tab-content" id="investments">
+            <div class="section-header">
+                <h1><i class="fas fa-chart-line"></i> Investments</h1>
+                <p>Track your stocks and F&O positions</p>
+            </div>
+
+            <!-- Investment Summary -->
+            <div class="investment-summary">
+                <div class="summary-card glass-card">
+                    <i class="fas fa-wallet"></i>
+                    <div class="summary-content">
+                        <span class="summary-label">Total Investment</span>
+                        <span class="summary-value" id="totalInvestment">₹0.00</span>
+                    </div>
+                </div>
+                <div class="summary-card glass-card">
+                    <i class="fas fa-chart-bar"></i>
+                    <div class="summary-content">
+                        <span class="summary-label">Current Value</span>
+                        <span class="summary-value" id="currentValue">₹0.00</span>
+                    </div>
+                </div>
+                <div class="summary-card glass-card profit">
+                    <i class="fas fa-arrow-trend-up"></i>
+                    <div class="summary-content">
+                        <span class="summary-label">Total P/L (Stocks)</span>
+                        <span class="summary-value" id="totalPL">₹0.00</span>
+                    </div>
+                </div>
+                <div class="summary-card glass-card">
+                    <i class="fas fa-dice"></i>
+                    <div class="summary-content">
+                        <span class="summary-label">F&O P/L</span>
+                        <span class="summary-value" id="fnoPL">₹0.00</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Add Stock Form -->
+            <div class="form-card glass-card">
+                <h3><i class="fas fa-plus-circle"></i> Add Stock Holding</h3>
+                <form id="stockForm">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label><i class="fas fa-building"></i> Company Name</label>
+                            <input type="text" id="stockName" placeholder="e.g., RELIANCE" required>
+                        </div>
+                        <div class="form-group">
+                            <label><i class="fas fa-hashtag"></i> Quantity</label>
+                            <input type="number" id="stockQty" placeholder="0" required min="1">
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label><i class="fas fa-tag"></i> Buy Price</label>
+                            <input type="number" id="buyPrice" placeholder="0.00" required min="0" step="0.01">
+                        </div>
+                        <div class="form-group">
+                            <label><i class="fas fa-chart-line"></i> Current Price</label>
+                            <input type="number" id="currentPrice" placeholder="0.00" required min="0" step="0.01">
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-plus"></i> Add Stock
+                    </button>
+                </form>
+            </div>
+
+            <!-- Stock Holdings -->
+            <div class="list-card glass-card">
+                <h3><i class="fas fa-briefcase"></i> Stock Holdings</h3>
+                <div class="stock-list" id="stockList">
+                    <p class="empty-state">No stocks added</p>
+                </div>
+            </div>
+
+            <!-- F&O Tracker -->
+            <div class="form-card glass-card">
+                <h3><i class="fas fa-dice"></i> F&O Entry</h3>
+                <form id="fnoForm">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label><i class="fas fa-file-alt"></i> Description</label>
+                            <input type="text" id="fnoDesc" placeholder="e.g., NIFTY CE 21000" required>
+                        </div>
+                        <div class="form-group">
+                            <label><i class="fas fa-rupee-sign"></i> Profit/Loss</label>
+                            <input type="number" id="fnoPLInput" placeholder="Enter +/- amount" required step="0.01">
+                        </div>
+                        <div class="form-group">
+                            <label><i class="fas fa-calendar"></i> Date</label>
+                            <input type="date" id="fnoDate" required>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-plus"></i> Add F&O Entry
+                    </button>
+                </form>
+            </div>
+
+            <!-- F&O History -->
+            <div class="list-card glass-card">
+                <h3><i class="fas fa-history"></i> F&O History</h3>
+                <div class="fno-list" id="fnoList">
+                    <p class="empty-state">No F&O entries</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Assets Section -->
+        <section class="tab-content" id="assets">
+            <div class="section-header">
+                <h1><i class="fas fa-coins"></i> Asset Tracker</h1>
+                <p>Track all your assets and net worth</p>
+            </div>
+
+            <!-- Asset Input Form -->
+            <div class="assets-form glass-card">
+                <h3><i class="fas fa-edit"></i> Update Asset Values</h3>
+                <div class="asset-inputs">
+                    <div class="asset-input-group">
+                        <label><i class="fas fa-university"></i> Bank Balance</label>
+                        <input type="number" id="assetBank" placeholder="0.00" step="0.01" oninput="updateNetWorth()">
+                    </div>
+                    <div class="asset-input-group">
+                        <label><i class="fas fa-chart-line"></i> Demat Value</label>
+                        <input type="number" id="assetDemat" placeholder="0.00" step="0.01" oninput="updateNetWorth()">
+                    </div>
+                    <div class="asset-input-group">
+                        <label><i class="fas fa-piggy-bank"></i> Fixed Deposits</label>
+                        <input type="number" id="assetFD" placeholder="0.00" step="0.01" oninput="updateNetWorth()">
+                    </div>
+                    <div class="asset-input-group">
+                        <label><i class="fas fa-shield-alt"></i> Insurance Value</label>
+                        <input type="number" id="assetInsurance" placeholder="0.00" step="0.01" oninput="updateNetWorth()">
+                    </div>
+                    <div class="asset-input-group">
+                        <label><i class="fas fa-money-bill-wave"></i> Cash in Hand</label>
+                        <input type="number" id="assetCash" placeholder="0.00" step="0.01" oninput="updateNetWorth()">
+                    </div>
+                    <div class="asset-input-group">
+                        <label><i class="fas fa-home"></i> Property Value</label>
+                        <input type="number" id="assetProperty" placeholder="0.00" step="0.01" oninput="updateNetWorth()">
+                    </div>
+                    <div class="asset-input-group">
+                        <label><i class="fas fa-gem"></i> Gold/Jewelry</label>
+                        <input type="number" id="assetGold" placeholder="0.00" step="0.01" oninput="updateNetWorth()">
+                    </div>
+                    <div class="asset-input-group">
+                        <label><i class="fas fa-ellipsis-h"></i> Other Assets</label>
+                        <input type="number" id="assetOther" placeholder="0.00" step="0.01" oninput="updateNetWorth()">
+                    </div>
+                </div>
+                <button class="btn btn-primary" onclick="saveAssets()">
+                    <i class="fas fa-save"></i> Save Assets
+                </button>
+            </div>
+
+            <!-- Net Worth Display -->
+            <div class="networth-display glass-card">
+                <div class="networth-header">
+                    <i class="fas fa-crown"></i>
+                    <h2>Total Net Worth</h2>
+                </div>
+                <div class="networth-amount" id="totalNetWorth">₹0.00</div>
+                <div class="networth-breakdown" id="networthBreakdown">
+                    <!-- Breakdown will be populated dynamically -->
+                </div>
+            </div>
+
+            <!-- Interest Calculator -->
+            <div class="interest-calc glass-card">
+                <h3><i class="fas fa-percentage"></i> Interest Projections</h3>
+                <div class="interest-cards">
+                    <div class="interest-card">
+                        <h4><i class="fas fa-university"></i> Bank Interest (2.5%/yr)</h4>
+                        <div class="projection">
+                            <span>1 Year: </span>
+                            <span id="bankInterest1Y">₹0.00</span>
+                        </div>
+                        <div class="projection">
+                            <span>5 Years: </span>
+                            <span id="bankInterest5Y">₹0.00</span>
+                        </div>
+                    </div>
+                    <div class="interest-card">
+                        <h4><i class="fas fa-piggy-bank"></i> FD Interest (7%/yr)</h4>
+                        <div class="projection">
+                            <span>1 Year: </span>
+                            <span id="fdInterest1Y">₹0.00</span>
+                        </div>
+                        <div class="projection">
+                            <span>5 Years: </span>
+                            <span id="fdInterest5Y">₹0.00</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Asset Distribution Chart -->
+            <div class="chart-card glass-card">
+                <h3><i class="fas fa-pie-chart"></i> Asset Distribution</h3>
+                <canvas id="assetDistributionChart"></canvas>
+            </div>
+        </section>
+    </main>
+
+    <!-- Toast Notification -->
+    <div id="toast" class="toast"></div>
+
+    <!-- Modal -->
+    <div id="modal" class="modal">
+        <div class="modal-content glass-card">
+            <div class="modal-header">
+                <h3 id="modalTitle">Modal Title</h3>
+                <button class="modal-close" onclick="closeModal()">&times;</button>
+            </div>
+            <div class="modal-body" id="modalBody">
+                <!-- Dynamic content -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts (Modular) -->
+    <script src="storage.js"></script>
+    <script src="charts.js"></script>
+    <script src="accounts.js"></script>
+    <script src="transactions.js"></script>
+    <script src="stocks.js"></script>
+    <script src="fno.js"></script>
+    <script src="assets.js"></script>
+    <script src="dashboard.js"></script>
+</body>
+</html>
