@@ -1,0 +1,2802 @@
+<!DOCTYPE html>
+<html lang="en">
+<!--
+████████████████████████████████████████████████████████████████████████████████
+█                                                                              █
+█  MoneyFlow Ultimate v5.0 - Advanced Personal Finance Manager                █
+█                                                                              █
+█  Coded by: Reinhard son Sangma                                              █
+█  Education: B.A 4th Semester, Raha College, Nagaon, Assam                   █
+█  Location: Dalimbari, West Karbi Anglong, Assam, India                      █
+█  Year: 2026                                                                  █
+█                                                                              █
+█  Features: Complete Financial Management System                              █
+█  - Account Management (Cash, Bank, Demat)                                   █
+█  - Transaction Tracking with Categories                                      █
+█  - Stock Portfolio with Brokerage (₹20)                                     █
+█  - F&O Trading Records                                                       █
+█  - Demat History Tracker                                                     █
+█  - Assets Management (FD, Insurance, Property, Vehicles) [NEW v5.0]         █
+█  - Financial Goals & Progress with Edit                                      █
+█  - Monthly Reports & CSV Export                                              █
+█  - ROI Calculator                                                            █
+█  - Budget Planner with Edit/Delete [NEW v5.0]                                █
+█  - Achievement System                                                        █
+█  - About Developer Page [NEW v5.0]                                           █
+█  - Terms & Conditions Page [NEW v5.0]                                        █
+█  - Export to CSV/JSON with Assets                                            █
+█  - Dark Mode (Persistent)                                                    █
+█  - Keyboard Shortcuts                                                        █
+█  - And Many More!                                                            █
+█                                                                              █
+████████████████████████████████████████████████████████████████████████████████
+-->
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="author" content="Reinhard son Sangma">
+    <meta name="description" content="Complete Personal Finance Management System">
+    <title>MoneyFlow Ultimate v5.0 - By Reinhard son Sangma</title>
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;500;600;700&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    
+    <style>
+        :root {
+            --bg-primary: #f0f4ff;
+            --bg-secondary: #ffffff;
+            --bg-glass: rgba(255, 255, 255, 0.4);
+            --text-primary: #1a1f36;
+            --text-secondary: #4a5568;
+            --gradient-purple: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --gradient-blue: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            --gradient-green: linear-gradient(135deg, #0ba360 0%, #3cba92 100%);
+            --gradient-pink: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            --gradient-orange: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
+            --gradient-gold: linear-gradient(135deg, #f7971e 0%, #ffd200 100%);
+            --blob-1: radial-gradient(circle at 30% 50%, rgba(102, 126, 234, 0.15), transparent 50%);
+            --blob-2: radial-gradient(circle at 70% 50%, rgba(118, 75, 162, 0.15), transparent 50%);
+            --blob-3: radial-gradient(circle at 50% 20%, rgba(79, 172, 254, 0.12), transparent 50%);
+            --shadow-soft: 0 8px 32px rgba(31, 38, 135, 0.12);
+            --shadow-medium: 0 12px 48px rgba(31, 38, 135, 0.15);
+            --shadow-strong: 0 16px 64px rgba(31, 38, 135, 0.2);
+            --glow-purple: 0 0 40px rgba(102, 126, 234, 0.3);
+            --font-display: 'Quicksand', sans-serif;
+            --font-body: 'DM Sans', sans-serif;
+            --radius-sm: 16px;
+            --radius-md: 24px;
+            --radius-lg: 32px;
+            --radius-xl: 48px;
+        }
+        body.dark-mode {
+            --bg-primary: #0f0f23;
+            --bg-secondary: #1a1a2e;
+            --bg-glass: rgba(26, 26, 46, 0.5);
+            --text-primary: #e2e8f0;
+            --text-secondary: #a0aec0;
+            --blob-1: radial-gradient(circle at 30% 50%, rgba(102, 126, 234, 0.25), transparent 50%);
+            --blob-2: radial-gradient(circle at 70% 50%, rgba(118, 75, 162, 0.25), transparent 50%);
+            --blob-3: radial-gradient(circle at 50% 20%, rgba(79, 172, 254, 0.2), transparent 50%);
+        }
+        * {margin: 0; padding: 0; box-sizing: border-box;}
+        html {scroll-behavior: smooth;}
+        body {
+            font-family: var(--font-body);
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.6;
+            overflow-x: hidden;
+            position: relative;
+        }
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--blob-1), var(--blob-2), var(--blob-3);
+            z-index: -1;
+            animation: liquidMove 20s ease-in-out infinite;
+        }
+        @keyframes liquidMove {
+            0%, 100% { background-position: 0% 50%, 100% 50%, 50% 0%; }
+            50% { background-position: 100% 50%, 0% 50%, 50% 100%; }
+        }
+        .navbar {
+            background: var(--bg-glass);
+            backdrop-filter: blur(20px) saturate(180%);
+            -webkit-backdrop-filter: blur(20px) saturate(180%);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.18);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: var(--shadow-soft);
+        }
+        .nav-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 1rem 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 2rem;
+        }
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-family: var(--font-display);
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
+        .logo-icon {
+            font-size: 2rem;
+            animation: liquidFloat 3s ease-in-out infinite;
+        }
+        @keyframes liquidFloat {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-8px); }
+        }
+        .nav-links {
+            display: flex;
+            gap: 0.75rem;
+            flex: 1;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        .nav-link {
+            padding: 0.875rem 1.25rem;
+            border-radius: var(--radius-lg);
+            text-decoration: none;
+            color: var(--text-secondary);
+            font-weight: 500;
+            transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+            font-size: 0.9rem;
+        }
+        .nav-link:hover {
+            color: var(--text-primary);
+            transform: translateY(-2px);
+        }
+        .nav-link.active {
+            background: var(--gradient-purple);
+            color: white;
+            box-shadow: var(--glow-purple);
+        }
+        .theme-toggle {
+            width: 52px;
+            height: 52px;
+            border-radius: 50%;
+            border: none;
+            background: var(--bg-glass);
+            cursor: pointer;
+            font-size: 1.5rem;
+            transition: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+            box-shadow: var(--shadow-soft);
+        }
+        .theme-toggle:hover {
+            transform: rotate(180deg) scale(1.15);
+        }
+        .btn-primary {
+            padding: 1rem 2rem;
+            background: var(--gradient-purple);
+            color: white;
+            border: none;
+            border-radius: var(--radius-lg);
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+            box-shadow: var(--shadow-soft);
+            font-family: var(--font-body);
+        }
+        .btn-primary:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--glow-purple);
+        }
+        .btn-secondary {
+            padding: 0.875rem 1.75rem;
+            background: var(--bg-glass);
+            color: var(--text-primary);
+            border: 1px solid rgba(255, 255, 255, 0.18);
+            border-radius: var(--radius-lg);
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: var(--font-body);
+        }
+        .btn-edit {
+            padding: 0.5rem 1rem;
+            background: var(--gradient-blue);
+            color: white;
+            border: none;
+            border-radius: var(--radius-md);
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 0.85rem;
+        }
+        .btn-delete {
+            padding: 0.5rem 1rem;
+            background: var(--gradient-pink);
+            color: white;
+            border: none;
+            border-radius: var(--radius-md);
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 0.85rem;
+        }
+        .section {
+            display: none;
+            min-height: calc(100vh - 80px);
+            padding: 2rem 0;
+        }
+        .section.active {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+        .section-title {
+            font-family: var(--font-display);
+            font-size: 3rem;
+            font-weight: 700;
+            background: var(--gradient-purple);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .action-buttons {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+        .cards-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+        .stat-card {
+            background: var(--bg-glass);
+            backdrop-filter: blur(20px) saturate(180%);
+            -webkit-backdrop-filter: blur(20px) saturate(180%);
+            border-radius: var(--radius-xl);
+            padding: 2.5rem;
+            display: flex;
+            gap: 1.5rem;
+            align-items: center;
+            box-shadow: var(--shadow-medium);
+            border: 1px solid rgba(255, 255, 255, 0.18);
+            transition: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+        .stat-card:hover {
+            transform: translateY(-12px);
+            box-shadow: var(--shadow-strong);
+        }
+        .card-icon {
+            font-size: 3rem;
+            width: 90px;
+            height: 90px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: var(--radius-lg);
+            flex-shrink: 0;
+            box-shadow: var(--shadow-soft);
+        }
+        .cash-card .card-icon { background: var(--gradient-purple); }
+        .bank-card .card-icon { background: var(--gradient-blue); }
+        .demat-card .card-icon { background: var(--gradient-green); }
+        .networth-card .card-icon { background: var(--gradient-orange); }
+        .income-card .card-icon { background: var(--gradient-green); }
+        .expense-card .card-icon { background: var(--gradient-pink); }
+        .stock-card .card-icon { background: var(--gradient-blue); }
+        .fo-card .card-icon { background: var(--gradient-purple); }
+        .savings-card .card-icon { background: var(--gradient-green); }
+        .card-content {
+            flex: 1;
+        }
+        .card-label {
+            font-size: 1rem;
+            color: var(--text-secondary);
+            font-weight: 500;
+            margin-bottom: 0.75rem;
+        }
+        .card-value {
+            font-size: 2.25rem;
+            font-weight: 700;
+            font-family: var(--font-display);
+            color: var(--text-primary);
+        }
+        .quick-actions {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+        .quick-action-btn {
+            padding: 1.5rem;
+            background: var(--bg-glass);
+            backdrop-filter: blur(20px) saturate(180%);
+            border-radius: var(--radius-lg);
+            border: 1px solid rgba(255, 255, 255, 0.18);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+            font-weight: 600;
+        }
+        .quick-action-btn:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-medium);
+        }
+        .charts-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(450px, 1fr));
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+        .chart-card {
+            background: var(--bg-glass);
+            backdrop-filter: blur(20px) saturate(180%);
+            border-radius: var(--radius-xl);
+            padding: 2.5rem;
+            box-shadow: var(--shadow-medium);
+            border: 1px solid rgba(255, 255, 255, 0.18);
+        }
+        .chart-title {
+            font-family: var(--font-display);
+            font-size: 1.75rem;
+            margin-bottom: 2rem;
+        }
+        .filter-bar {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+        }
+        .filter-bar input, .filter-bar select {
+            padding: 0.875rem 1.25rem;
+            border: 1px solid rgba(255, 255, 255, 0.18);
+            border-radius: var(--radius-md);
+            background: var(--bg-glass);
+            color: var(--text-primary);
+            font-family: var(--font-body);
+        }
+        .filter-bar input[type="text"] {
+            flex: 1;
+            min-width: 200px;
+        }
+        .accounts-grid, .stocks-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 2rem;
+        }
+        .account-card, .stock-card {
+            background: var(--bg-glass);
+            backdrop-filter: blur(20px) saturate(180%);
+            border-radius: var(--radius-xl);
+            padding: 2rem;
+            box-shadow: var(--shadow-medium);
+            border: 1px solid rgba(255, 255, 255, 0.18);
+            transition: all 0.3s ease;
+        }
+        .account-card:hover, .stock-card:hover {
+            transform: translateY(-8px);
+            box-shadow: var(--shadow-strong);
+        }
+        .account-actions {
+            margin-top: 1rem;
+            display: flex;
+            gap: 0.75rem;
+        }
+        .stock-actions {
+            display: flex;
+            gap: 0.75rem;
+            margin-top: 1rem;
+        }
+        .stock-actions button {
+            flex: 1;
+        }
+        .transactions-grid, .fo-grid, .demat-history-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+        .transaction-item, .fo-card, .demat-history-item {
+            background: var(--bg-glass);
+            backdrop-filter: blur(20px) saturate(180%);
+            border-radius: var(--radius-lg);
+            padding: 1.5rem;
+            box-shadow: var(--shadow-soft);
+            border: 1px solid rgba(255, 255, 255, 0.18);
+            display: grid;
+            grid-template-columns: auto 1fr auto auto;
+            gap: 1.5rem;
+            align-items: center;
+            transition: all 0.3s ease;
+        }
+        .transaction-item:hover, .fo-card:hover, .demat-history-item:hover {
+            transform: translateX(8px);
+            box-shadow: var(--shadow-medium);
+        }
+        .txn-icon, .fo-icon, .demat-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: var(--radius-md);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+        }
+        .txn-icon.income { background: rgba(11, 163, 96, 0.15); }
+        .txn-icon.expense { background: rgba(245, 87, 108, 0.15); }
+        .fo-icon { background: rgba(102, 126, 234, 0.15); }
+        .demat-icon.buy { background: rgba(245, 87, 108, 0.15); }
+        .demat-icon.sell { background: rgba(11, 163, 96, 0.15); }
+        .demat-icon.brokerage { background: rgba(255, 165, 0, 0.15); }
+        .txn-amount, .demat-amount {
+            font-size: 1.5rem;
+            font-weight: 700;
+            font-family: var(--font-display);
+        }
+        .txn-amount.income, .demat-amount.credit { color: #0ba360; }
+        .txn-amount.expense, .demat-amount.debit { color: #f5576c; }
+        .goal-card {
+            background: var(--bg-glass);
+            backdrop-filter: blur(20px) saturate(180%);
+            border-radius: var(--radius-xl);
+            padding: 2rem;
+            box-shadow: var(--shadow-medium);
+            border: 1px solid rgba(255, 255, 255, 0.18);
+            margin-bottom: 1.5rem;
+        }
+        .goal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+        .goal-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+        }
+        .goal-progress {
+            width: 100%;
+            height: 20px;
+            background: rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+            overflow: hidden;
+            margin: 1rem 0;
+        }
+        .goal-progress-bar {
+            height: 100%;
+            background: var(--gradient-green);
+            transition: width 0.5s ease;
+            border-radius: 10px;
+        }
+        .goal-stats {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(12px);
+            z-index: 2000;
+            align-items: center;
+            justify-content: center;
+        }
+        .modal.active {
+            display: flex;
+        }
+        .modal-content {
+            background: var(--bg-glass);
+            backdrop-filter: blur(30px) saturate(180%);
+            border-radius: var(--radius-xl);
+            width: 90%;
+            max-width: 520px;
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: var(--shadow-strong);
+            border: 1px solid rgba(255, 255, 255, 0.18);
+        }
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 2rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .modal-close {
+            width: 40px;
+            height: 40px;
+            border: none;
+            background: transparent;
+            font-size: 2rem;
+            cursor: pointer;
+            color: var(--text-primary);
+        }
+        form {
+            padding: 2rem;
+        }
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+        }
+        .form-group input, .form-group select, .form-group textarea {
+            width: 100%;
+            padding: 0.875rem 1.25rem;
+            border: 1px solid rgba(255, 255, 255, 0.18);
+            border-radius: var(--radius-md);
+            background: var(--bg-secondary);
+            color: var(--text-primary);
+            font-family: var(--font-body);
+        }
+        .radio-group {
+            display: flex;
+            gap: 1rem;
+        }
+        .radio-label {
+            cursor: pointer;
+            flex: 1;
+        }
+        .radio-label input[type="radio"] {
+            display: none;
+        }
+        .radio-custom {
+            display: block;
+            padding: 1rem;
+            border: 2px solid rgba(255, 255, 255, 0.18);
+            border-radius: var(--radius-md);
+            text-align: center;
+            font-weight: 600;
+        }
+        .radio-label input[type="radio"]:checked + .radio-custom.income {
+            background: rgba(11, 163, 96, 0.15);
+            border-color: #0ba360;
+            color: #0ba360;
+        }
+        .radio-label input[type="radio"]:checked + .radio-custom.expense {
+            background: rgba(245, 87, 108, 0.15);
+            border-color: #f5576c;
+            color: #f5576c;
+        }
+        .form-actions {
+            display: flex;
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+        .form-actions button {
+            flex: 1;
+        }
+        .info-text {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            margin-top: 0.25rem;
+        }
+        .summary-stats {
+            background: var(--bg-glass);
+            backdrop-filter: blur(20px) saturate(180%);
+            border-radius: var(--radius-xl);
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: var(--shadow-medium);
+            border: 1px solid rgba(255, 255, 255, 0.18);
+        }
+        .summary-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+        }
+        .summary-item h4 {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            margin-bottom: 0.5rem;
+        }
+        .summary-item p {
+            font-size: 1.75rem;
+            font-weight: 700;
+            font-family: var(--font-display);
+        }
+        .summary-item.credit p { color: #0ba360; }
+        .summary-item.debit p { color: #f5576c; }
+        .achievement-badge {
+            display: inline-block;
+            padding: 0.5rem 1rem;
+            background: var(--gradient-gold);
+            color: white;
+            border-radius: var(--radius-md);
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin: 0.25rem;
+        }
+        .footer {
+            background: var(--bg-glass);
+            backdrop-filter: blur(20px) saturate(180%);
+            border-top: 1px solid rgba(255, 255, 255, 0.18);
+            padding: 2rem;
+            text-align: center;
+            margin-top: 4rem;
+        }
+        .footer-signature {
+            font-family: var(--font-display);
+            font-size: 1.25rem;
+            font-weight: 700;
+            background: var(--gradient-purple);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 0.5rem;
+        }
+        .keyboard-hint {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: var(--bg-glass);
+            backdrop-filter: blur(20px) saturate(180%);
+            padding: 1rem;
+            border-radius: var(--radius-md);
+            font-size: 0.85rem;
+            box-shadow: var(--shadow-soft);
+            z-index: 500;
+            opacity: 0.7;
+            transition: opacity 0.3s ease;
+        }
+        .keyboard-hint:hover {
+            opacity: 1;
+        }
+        @media (max-width: 768px) {
+            .section-title {
+                font-size: 2rem;
+            }
+            .cards-grid, .charts-grid {
+                grid-template-columns: 1fr;
+            }
+            .keyboard-hint {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="logo">
+                <span class="logo-icon">💰</span>
+                <span class="logo-text">MoneyFlow</span>
+            </div>
+            <div class="nav-links">
+                <a href="#" class="nav-link active" data-section="dashboard">Dashboard</a>
+                <a href="#" class="nav-link" data-section="accounts">Accounts</a>
+                <a href="#" class="nav-link" data-section="transactions">Transactions</a>
+                <a href="#" class="nav-link" data-section="demat-history">Demat</a>
+                <a href="#" class="nav-link" data-section="assets">Assets</a>
+                <a href="#" class="nav-link" data-section="investments">Stocks</a>
+                <a href="#" class="nav-link" data-section="fo">F&O</a>
+                <a href="#" class="nav-link" data-section="goals">Goals</a>
+                <a href="#" class="nav-link" data-section="budget">Budget</a>
+                <a href="#" class="nav-link" data-section="reports">Reports</a>
+                <a href="#" class="nav-link" data-section="about">About</a>
+                <a href="#" class="nav-link" data-section="terms">Terms</a>
+            </div>
+            <div class="nav-actions">
+                <button class="theme-toggle" id="themeToggle">🌙</button>
+            </div>
+        </div>
+    </nav>
+
+    <section id="dashboard" class="section active">
+        <div class="container">
+            <h1 class="section-title">Dashboard</h1>
+            
+            <div class="quick-actions">
+                <button class="quick-action-btn" onclick="quickAddIncome()">⚡ Quick Income</button>
+                <button class="quick-action-btn" onclick="quickAddExpense()">⚡ Quick Expense</button>
+                <button class="quick-action-btn" onclick="quickTransfer()">⚡ Quick Transfer</button>
+                <button class="quick-action-btn" onclick="generateMonthlyReport()">📊 Monthly Report</button>
+            </div>
+            
+            <div class="cards-grid">
+                <div class="stat-card cash-card">
+                    <div class="card-icon">💵</div>
+                    <div class="card-content">
+                        <h3 class="card-label">Cash</h3>
+                        <p class="card-value" id="cashBalance">₹0.00</p>
+                    </div>
+                </div>
+                <div class="stat-card bank-card">
+                    <div class="card-icon">🏦</div>
+                    <div class="card-content">
+                        <h3 class="card-label">Bank</h3>
+                        <p class="card-value" id="bankBalance">₹0.00</p>
+                    </div>
+                </div>
+                <div class="stat-card demat-card">
+                    <div class="card-icon">📊</div>
+                    <div class="card-content">
+                        <h3 class="card-label">Demat</h3>
+                        <p class="card-value" id="dematBalance">₹0.00</p>
+                    </div>
+                </div>
+                <div class="stat-card networth-card">
+                    <div class="card-icon">💎</div>
+                    <div class="card-content">
+                        <h3 class="card-label">Net Worth</h3>
+                        <p class="card-value" id="totalNetWorth">₹0.00</p>
+                    </div>
+                </div>
+            </div>
+            <div class="cards-grid">
+                <div class="stat-card income-card">
+                    <div class="card-icon">📈</div>
+                    <div class="card-content">
+                        <h3 class="card-label">Monthly Income</h3>
+                        <p class="card-value" id="monthlyIncome">₹0.00</p>
+                    </div>
+                </div>
+                <div class="stat-card expense-card">
+                    <div class="card-icon">💸</div>
+                    <div class="card-content">
+                        <h3 class="card-label">Monthly Expense</h3>
+                        <p class="card-value" id="monthlyExpense">₹0.00</p>
+                    </div>
+                </div>
+                <div class="stat-card savings-card">
+                    <div class="card-icon">💰</div>
+                    <div class="card-content">
+                        <h3 class="card-label">Savings Rate</h3>
+                        <p class="card-value" id="savingsRate">0%</p>
+                    </div>
+                </div>
+                <div class="stat-card stock-card">
+                    <div class="card-icon">📉</div>
+                    <div class="card-content">
+                        <h3 class="card-label">Total P/L</h3>
+                        <p class="card-value" id="totalPL">₹0.00</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="cards-grid">
+                <div class="stat-card investment-card">
+                    <div class="card-icon">💵</div>
+                    <div class="card-content">
+                        <h3 class="card-label">Stock Invested</h3>
+                        <p class="card-value" id="stockInvested">₹0.00</p>
+                    </div>
+                </div>
+                <div class="stat-card value-card">
+                    <div class="card-icon">💎</div>
+                    <div class="card-content">
+                        <h3 class="card-label">Stock Current Value</h3>
+                        <p class="card-value" id="stockCurrentValue">₹0.00</p>
+                    </div>
+                </div>
+                <div class="stat-card growth-card">
+                    <div class="card-icon">📊</div>
+                    <div class="card-content">
+                        <h3 class="card-label">Stock Growth</h3>
+                        <p class="card-value" id="stockGrowth">+0%</p>
+                    </div>
+                </div>
+                <div class="stat-card profit-card">
+                    <div class="card-icon">💰</div>
+                    <div class="card-content">
+                        <h3 class="card-label">Stock Profit</h3>
+                        <p class="card-value" id="stockProfit">₹0.00</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div id="achievementDisplay" style="margin: 2rem 0;"></div>
+            
+            <div class="charts-grid">
+                <div class="chart-card">
+                    <h3 class="chart-title">Net Worth Distribution</h3>
+                    <canvas id="networthPieChart"></canvas>
+                </div>
+                <div class="chart-card">
+                    <h3 class="chart-title">Net Worth Growth</h3>
+                    <canvas id="growthChart"></canvas>
+                </div>
+            </div>
+            <div class="charts-grid">
+                <div class="chart-card">
+                    <h3 class="chart-title">Income vs Expense</h3>
+                    <canvas id="incomeExpenseChart"></canvas>
+                </div>
+                <div class="chart-card">
+                    <h3 class="chart-title">Expense by Category</h3>
+                    <canvas id="categoryChart"></canvas>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="accounts" class="section">
+        <div class="container">
+            <div class="section-header">
+                <h1 class="section-title">Accounts</h1>
+                <button class="btn-primary" id="transferBtn">💸 Transfer</button>
+            </div>
+            <div id="accountsList" class="accounts-grid"></div>
+        </div>
+    </section>
+
+    <section id="transactions" class="section">
+        <div class="container">
+            <div class="section-header">
+                <h1 class="section-title">Transactions</h1>
+                <div class="action-buttons">
+                    <button class="btn-primary" id="addTransactionBtn">+ Add</button>
+                    <button class="btn-secondary" id="exportCSVBtn">📊 CSV</button>
+                    <button class="btn-secondary" id="exportJSONBtn">💾 Backup</button>
+                    <button class="btn-secondary" id="importJSONBtn">📂 Restore</button>
+                </div>
+            </div>
+            <div class="filter-bar">
+                <input type="text" id="searchTxn" placeholder="🔍 Search transactions...">
+                <select id="filterType">
+                    <option value="all">All Types</option>
+                    <option value="income">Income</option>
+                    <option value="expense">Expense</option>
+                </select>
+                <select id="filterCategory">
+                    <option value="all">All Categories</option>
+                </select>
+                <input type="date" id="filterDateFrom">
+                <input type="date" id="filterDateTo">
+            </div>
+            <div id="transactionsList" class="transactions-grid"></div>
+        </div>
+    </section>
+
+    <section id="demat-history" class="section">
+        <div class="container">
+            <div class="section-header">
+                <h1 class="section-title">Demat History</h1>
+                <button class="btn-secondary" onclick="exportDematPDF()">📄 Export PDF</button>
+            </div>
+            <div class="summary-stats">
+                <div class="summary-grid">
+                    <div class="summary-item credit">
+                        <h4>Total Credited</h4>
+                        <p id="totalCredited">₹0.00</p>
+                    </div>
+                    <div class="summary-item debit">
+                        <h4>Total Debited</h4>
+                        <p id="totalDebited">₹0.00</p>
+                    </div>
+                    <div class="summary-item">
+                        <h4>Total Brokerage</h4>
+                        <p id="totalBrokerage">₹0.00</p>
+                    </div>
+                    <div class="summary-item">
+                        <h4>Net Flow</h4>
+                        <p id="netFlow">₹0.00</p>
+                    </div>
+                </div>
+            </div>
+            <div id="dematHistoryList" class="demat-history-grid"></div>
+        </div>
+    </section>
+
+    <section id="investments" class="section">
+        <div class="container">
+            <div class="section-header">
+                <h1 class="section-title">Stocks</h1>
+                <button class="btn-primary" id="addStockBtn">+ Add Stock</button>
+            </div>
+            <div id="stocksList" class="stocks-grid"></div>
+        </div>
+    </section>
+
+    <section id="fo" class="section">
+        <div class="container">
+            <div class="section-header">
+                <h1 class="section-title">F&O Trades</h1>
+                <button class="btn-primary" id="addFOBtn">+ Add Trade</button>
+            </div>
+            <div id="foList" class="fo-grid"></div>
+        </div>
+    </section>
+
+    <section id="goals" class="section">
+        <div class="container">
+            <div class="section-header">
+                <h1 class="section-title">Financial Goals</h1>
+                <button class="btn-primary" id="addGoalBtn">+ Add Goal</button>
+            </div>
+            <div id="goalsList"></div>
+        </div>
+    </section>
+
+    <section id="reports" class="section">
+        <div class="container">
+            <div class="section-header">
+                <h1 class="section-title">Reports & Analytics</h1>
+                <button class="btn-primary" onclick="generatePDFReport()">📄 Generate PDF</button>
+            </div>
+            <div id="reportContent"></div>
+        </div>
+    </section>
+
+    <section id="budget" class="section">
+        <div class="container">
+            <div class="section-header">
+                <h1 class="section-title">Budget Planner</h1>
+                <button class="btn-primary" id="setBudgetBtn">Set Budget</button>
+            </div>
+            <div id="budgetDisplay"></div>
+        </div>
+    </section>
+
+    <section id="assets" class="section">
+        <div class="container">
+            <div class="section-header">
+                <h1 class="section-title">Assets</h1>
+                <button class="btn-primary" id="addAssetBtn">+ Add Asset</button>
+            </div>
+            
+            <div class="summary-stats">
+                <div class="summary-grid">
+                    <div class="summary-item">
+                        <h4>Fixed Deposits</h4>
+                        <p id="totalFD">₹0.00</p>
+                    </div>
+                    <div class="summary-item">
+                        <h4>Insurance</h4>
+                        <p id="totalInsurance">₹0.00</p>
+                    </div>
+                    <div class="summary-item">
+                        <h4>Property</h4>
+                        <p id="totalProperty">₹0.00</p>
+                    </div>
+                    <div class="summary-item">
+                        <h4>Vehicles</h4>
+                        <p id="totalVehicles">₹0.00</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div id="assetsList" class="stocks-grid"></div>
+        </div>
+    </section>
+
+    <section id="about" class="section">
+        <div class="container">
+            <h1 class="section-title">About the Developer</h1>
+            
+            <div class="chart-card" style="max-width: 800px; margin: 2rem auto;">
+                <div style="text-align: center; padding: 2rem;">
+                    <div style="width: 150px; height: 150px; margin: 0 auto 2rem; border-radius: 50%; overflow: hidden; border: 4px solid transparent; background: var(--gradient-purple); padding: 4px;">
+                        <img src="https://i.ibb.co/ZRXMm7Z4/IMG20260318162114.jpg" alt="Reinhard son Sangma" style="width: 100%; height: 100%; object-fit: cover; border-radius: 50%;">
+                    </div>
+                    
+                    <h2 style="font-family: var(--font-display); font-size: 2.5rem; margin-bottom: 1rem; background: var(--gradient-purple); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">
+                        Reinhard son Sangma
+                    </h2>
+                    
+                    <p style="font-size: 1.25rem; color: var(--text-secondary); margin-bottom: 2rem;">
+                        Developer & Finance Enthusiast
+                    </p>
+                    
+                    <div style="text-align: left; max-width: 600px; margin: 0 auto; line-height: 2;">
+                        <p><strong>Education:</strong> B.A 4th Semester</p>
+                        <p><strong>College:</strong> Raha College, Nagaon, Assam</p>
+                        <p><strong>Location:</strong> Dalimbari, West Karbi Anglong, Assam, India</p>
+                        <p style="margin-top: 2rem;"><strong>About MoneyFlow:</strong></p>
+                        <p style="color: var(--text-secondary);">
+                            MoneyFlow Ultimate is a comprehensive personal finance management system designed to help individuals track their finances, investments, and achieve their financial goals. Built with modern web technologies and a focus on user experience.
+                        </p>
+                        <p style="margin-top: 1.5rem;"><strong>Features:</strong></p>
+                        <ul style="color: var(--text-secondary); padding-left: 1.5rem;">
+                            <li>Complete account management (Cash, Bank, Demat)</li>
+                            <li>Stock portfolio tracking with realistic ₹20 brokerage</li>
+                            <li>Asset management (FD, Insurance, Property, Vehicles)</li>
+                            <li>F&O trading records and P/L tracking</li>
+                            <li>Budget planning and goal setting</li>
+                            <li>Detailed analytics with interactive charts</li>
+                            <li>Dark mode support with persistence</li>
+                            <li>Complete data export and backup system</li>
+                            <li>Keyboard shortcuts for power users</li>
+                            <li>Achievement system for milestones</li>
+                        </ul>
+                        <p style="margin-top: 2rem; font-size: 1.1rem; color: var(--text-primary);">
+                            <strong>Version:</strong> 5.0 (2026)
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="terms" class="section">
+        <div class="container">
+            <h1 class="section-title">Terms & Conditions</h1>
+            
+            <div class="chart-card" style="max-width: 900px; margin: 2rem auto; padding: 3rem;">
+                <div style="line-height: 1.8; color: var(--text-secondary);">
+                    <p style="font-size: 0.9rem; color: var(--text-secondary); margin-bottom: 2rem;">
+                        <strong>Last Updated:</strong> March 2026
+                    </p>
+                    
+                    <h3 style="color: var(--text-primary); margin-top: 2rem; margin-bottom: 1rem;">1. Acceptance of Terms</h3>
+                    <p>By using MoneyFlow Ultimate, you agree to these terms and conditions. This application is provided "as is" for personal finance management purposes.</p>
+                    
+                    <h3 style="color: var(--text-primary); margin-top: 2rem; margin-bottom: 1rem;">2. Data Storage</h3>
+                    <p>All your financial data is stored locally in your browser's localStorage. We do not collect, transmit, or store any of your data on external servers. You are responsible for:</p>
+                    <ul style="padding-left: 1.5rem; margin-top: 0.5rem;">
+                        <li>Maintaining regular backups of your data</li>
+                        <li>Protecting your device and browser data</li>
+                        <li>Understanding that clearing browser data will delete all records</li>
+                    </ul>
+                    
+                    <h3 style="color: var(--text-primary); margin-top: 2rem; margin-bottom: 1rem;">3. Accuracy of Information</h3>
+                    <p>While MoneyFlow provides tools for financial tracking, it is your responsibility to:</p>
+                    <ul style="padding-left: 1.5rem; margin-top: 0.5rem;">
+                        <li>Ensure accuracy of all entered data</li>
+                        <li>Verify calculations independently</li>
+                        <li>Not rely solely on this application for financial decisions</li>
+                        <li>Consult financial professionals for investment advice</li>
+                    </ul>
+                    
+                    <h3 style="color: var(--text-primary); margin-top: 2rem; margin-bottom: 1rem;">4. Privacy</h3>
+                    <p>Your privacy is important. This application:</p>
+                    <ul style="padding-left: 1.5rem; margin-top: 0.5rem;">
+                        <li>Does not require registration or login</li>
+                        <li>Does not collect personal information</li>
+                        <li>Does not use cookies for tracking</li>
+                        <li>Operates entirely offline after initial load</li>
+                        <li>Does not share data with third parties</li>
+                    </ul>
+                    
+                    <h3 style="color: var(--text-primary); margin-top: 2rem; margin-bottom: 1rem;">5. Disclaimer</h3>
+                    <p>MoneyFlow Ultimate is provided for informational and organizational purposes only. The developer is not responsible for:</p>
+                    <ul style="padding-left: 1.5rem; margin-top: 0.5rem;">
+                        <li>Financial losses or gains from investment decisions</li>
+                        <li>Data loss due to browser issues or device problems</li>
+                        <li>Errors in calculations or data entry</li>
+                        <li>Third-party actions or market conditions</li>
+                    </ul>
+                    
+                    <h3 style="color: var(--text-primary); margin-top: 2rem; margin-bottom: 1rem;">6. Limitations</h3>
+                    <p>This application:</p>
+                    <ul style="padding-left: 1.5rem; margin-top: 0.5rem;">
+                        <li>Is not a licensed financial advisory service</li>
+                        <li>Does not provide tax, legal, or investment advice</li>
+                        <li>Does not guarantee accuracy of stock prices or market data</li>
+                        <li>Should not replace professional financial planning</li>
+                    </ul>
+                    
+                    <h3 style="color: var(--text-primary); margin-top: 2rem; margin-bottom: 1rem;">7. User Responsibilities</h3>
+                    <p>You agree to:</p>
+                    <ul style="padding-left: 1.5rem; margin-top: 0.5rem;">
+                        <li>Use the application for personal, non-commercial purposes</li>
+                        <li>Not attempt to reverse engineer or modify the code maliciously</li>
+                        <li>Export and backup your data regularly</li>
+                        <li>Keep your financial information secure</li>
+                    </ul>
+                    
+                    <h3 style="color: var(--text-primary); margin-top: 2rem; margin-bottom: 1rem;">8. Modifications</h3>
+                    <p>The developer reserves the right to modify these terms at any time. Continued use of the application constitutes acceptance of modified terms.</p>
+                    
+                    <h3 style="color: var(--text-primary); margin-top: 2rem; margin-bottom: 1rem;">9. Contact</h3>
+                    <p>For questions about these terms or the application, please refer to the About section.</p>
+                    
+                    <div style="margin-top: 3rem; padding-top: 2rem; border-top: 1px solid rgba(255,255,255,0.1); text-align: center;">
+                        <p style="font-weight: 600; color: var(--text-primary);">
+                            By using MoneyFlow Ultimate, you acknowledge that you have read, understood, and agree to these terms and conditions.
+                        </p>
+                        <p style="margin-top: 1rem; font-size: 0.9rem;">
+                            © 2026 MoneyFlow Ultimate - Coded by Reinhard son Sangma
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer with Signature -->
+    <footer class="footer">
+        <p class="footer-signature">💻 Coded by: Reinhard son Sangma</p>
+        <p style="color: var(--text-secondary); font-size: 0.9rem;">B.A 4th Semester, Raha College, Nagaon, Assam</p>
+        <p style="color: var(--text-secondary); font-size: 0.85rem; margin-top: 0.5rem;">Dalimbari, West Karbi Anglong, Assam, India</p>
+        <p style="color: var(--text-secondary); font-size: 0.85rem; margin-top: 1rem;">© 2026 MoneyFlow Ultimate - All Rights Reserved</p>
+    </footer>
+
+    <!-- Keyboard Shortcuts Hint -->
+    <div class="keyboard-hint">
+        ⌨️ Shortcuts: Alt+I (Income) | Alt+E (Expense) | Alt+T (Transfer)
+    </div>
+
+    <!-- Modals -->
+    <div class="modal" id="editBalanceModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Edit Account Balance</h2>
+                <button class="modal-close" onclick="closeModal('editBalanceModal')">×</button>
+            </div>
+            <form id="editBalanceForm">
+                <input type="hidden" id="editAccountId">
+                <div class="form-group">
+                    <label>Account</label>
+                    <input type="text" id="editAccountName" readonly style="background: rgba(0,0,0,0.1);">
+                </div>
+                <div class="form-group">
+                    <label>Current Balance</label>
+                    <input type="text" id="currentBalanceDisplay" readonly style="background: rgba(0,0,0,0.1);">
+                </div>
+                <div class="form-group">
+                    <label>New Balance (₹)</label>
+                    <input type="number" name="newBalance" id="newBalance" min="0" step="0.01" required>
+                </div>
+                <div class="form-group">
+                    <label>Reason for Change</label>
+                    <input type="text" name="reason" placeholder="e.g., Correction, Wrong entry" required>
+                </div>
+                <div class="form-actions">
+                    <button type="button" class="btn-secondary" onclick="closeModal('editBalanceModal')">Cancel</button>
+                    <button type="submit" class="btn-primary">Update Balance</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div class="modal" id="transferModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Transfer Money</h2>
+                <button class="modal-close" onclick="closeModal('transferModal')">×</button>
+            </div>
+            <form id="transferForm">
+                <div class="form-group">
+                    <label>From</label>
+                    <select name="from" id="transferFrom" required></select>
+                </div>
+                <div class="form-group">
+                    <label>To</label>
+                    <select name="to" id="transferTo" required></select>
+                </div>
+                <div class="form-group">
+                    <label>Amount (₹)</label>
+                    <input type="number" name="amount" min="0.01" step="0.01" required>
+                </div>
+                <div class="form-actions">
+                    <button type="button" class="btn-secondary" onclick="closeModal('transferModal')">Cancel</button>
+                    <button type="submit" class="btn-primary">Transfer</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div class="modal" id="txnModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="txnModalTitle">Add Transaction</h2>
+                <button class="modal-close" onclick="closeModal('txnModal')">×</button>
+            </div>
+            <form id="txnForm">
+                <input type="hidden" id="editTxnId">
+                <div class="form-group">
+                    <div class="radio-group">
+                        <label class="radio-label">
+                            <input type="radio" name="type" value="income" checked onchange="updateCategories()">
+                            <span class="radio-custom income">Income</span>
+                        </label>
+                        <label class="radio-label">
+                            <input type="radio" name="type" value="expense" onchange="updateCategories()">
+                            <span class="radio-custom expense">Expense</span>
+                        </label>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Account</label>
+                    <select name="account" id="txnAccount" required></select>
+                </div>
+                <div class="form-group">
+                    <label>Category</label>
+                    <select name="category" id="txnCategory" required></select>
+                </div>
+                <div class="form-group">
+                    <label>Amount (₹)</label>
+                    <input type="number" name="amount" id="txnAmount" min="0.01" step="0.01" required>
+                </div>
+                <div class="form-group">
+                    <label>Date</label>
+                    <input type="date" name="date" id="txnDate" required>
+                </div>
+                <div class="form-group">
+                    <label>Notes</label>
+                    <input type="text" name="notes" id="txnNotes">
+                </div>
+                <div class="form-actions">
+                    <button type="button" class="btn-secondary" onclick="closeModal('txnModal')">Cancel</button>
+                    <button type="submit" class="btn-primary" id="txnSubmitBtn">Add</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div class="modal" id="stockModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="stockModalTitle">Add Stock</h2>
+                <button class="modal-close" onclick="closeModal('stockModal')">×</button>
+            </div>
+            <form id="stockForm">
+                <input type="hidden" id="editStockId">
+                <div class="form-group">
+                    <label>Company Name</label>
+                    <input type="text" name="company" id="stockCompany" required>
+                </div>
+                <div class="form-group">
+                    <label>Symbol</label>
+                    <input type="text" name="symbol" id="stockSymbol" required>
+                </div>
+                <div class="form-group">
+                    <label>Shares</label>
+                    <input type="number" name="shares" id="stockShares" min="0.01" step="0.01" required>
+                </div>
+                <div class="form-group">
+                    <label>Buy Price (₹)</label>
+                    <input type="number" name="buyPrice" id="stockBuyPrice" min="0.01" step="0.01" required>
+                </div>
+                <div class="form-group">
+                    <label>Current Price (₹)</label>
+                    <input type="number" name="currentPrice" id="stockCurrentPrice" min="0.01" step="0.01" required>
+                </div>
+                <p class="info-text" style="margin: -1rem 0 1rem 0; padding: 0 0.5rem;">Note: ₹20 brokerage will be charged on buy/sell</p>
+                <div class="form-actions">
+                    <button type="button" class="btn-secondary" onclick="closeModal('stockModal')">Cancel</button>
+                    <button type="submit" class="btn-primary" id="stockSubmitBtn">Add</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div class="modal" id="foModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="foModalTitle">Add F&O Trade</h2>
+                <button class="modal-close" onclick="closeModal('foModal')">×</button>
+            </div>
+            <form id="foForm">
+                <input type="hidden" id="editFOId">
+                <div class="form-group">
+                    <label>Instrument</label>
+                    <input type="text" name="instrument" id="foInstrument" required>
+                </div>
+                <div class="form-group">
+                    <label>P/L (₹)</label>
+                    <input type="number" name="pl" id="foPL" step="0.01" required>
+                </div>
+                <div class="form-group">
+                    <label>Date</label>
+                    <input type="date" name="date" id="foDate" required>
+                </div>
+                <div class="form-group">
+                    <label>Notes</label>
+                    <input type="text" name="notes" id="foNotes">
+                </div>
+                <div class="form-actions">
+                    <button type="button" class="btn-secondary" onclick="closeModal('foModal')">Cancel</button>
+                    <button type="submit" class="btn-primary" id="foSubmitBtn">Add</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div class="modal" id="goalModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Add Financial Goal</h2>
+                <button class="modal-close" onclick="closeModal('goalModal')">×</button>
+            </div>
+            <form id="goalForm">
+                <div class="form-group">
+                    <label>Goal Name</label>
+                    <input type="text" name="name" placeholder="e.g., Save ₹1,00,000" required>
+                </div>
+                <div class="form-group">
+                    <label>Target Amount (₹)</label>
+                    <input type="number" name="target" min="1" step="0.01" required>
+                </div>
+                <div class="form-group">
+                    <label>Current Amount (₹)</label>
+                    <input type="number" name="current" min="0" step="0.01" value="0" required>
+                </div>
+                <div class="form-actions">
+                    <button type="button" class="btn-secondary" onclick="closeModal('goalModal')">Cancel</button>
+                    <button type="submit" class="btn-primary">Add Goal</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div class="modal" id="budgetModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Set Monthly Budget</h2>
+                <button class="modal-close" onclick="closeModal('budgetModal')">×</button>
+            </div>
+            <form id="budgetForm">
+                <div class="form-group">
+                    <label>Category</label>
+                    <select name="category" required>
+                        <option value="Food">Food</option>
+                        <option value="Transport">Transport</option>
+                        <option value="Shopping">Shopping</option>
+                        <option value="Bills">Bills</option>
+                        <option value="Entertainment">Entertainment</option>
+                        <option value="Health">Health</option>
+                        <option value="Education">Education</option>
+                        <option value="Rent">Rent</option>
+                        <option value="Other">Other</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Monthly Limit (₹)</label>
+                    <input type="number" name="limit" min="1" step="0.01" required>
+                </div>
+                <div class="form-actions">
+                    <button type="button" class="btn-secondary" onclick="closeModal('budgetModal')">Cancel</button>
+                    <button type="submit" class="btn-primary">Set Budget</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div class="modal" id="assetModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="assetModalTitle">Add Asset</h2>
+                <button class="modal-close" onclick="closeModal('assetModal')">×</button>
+            </div>
+            <form id="assetForm">
+                <input type="hidden" id="editAssetId">
+                <div class="form-group">
+                    <label>Asset Type</label>
+                    <select name="type" id="assetType" required>
+                        <option value="fd">Fixed Deposit</option>
+                        <option value="insurance">Insurance</option>
+                        <option value="property">Property</option>
+                        <option value="bike">Bike</option>
+                        <option value="car">Car</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Name/Description</label>
+                    <input type="text" name="name" id="assetName" placeholder="e.g., HDFC FD, Honda City" required>
+                </div>
+                <div class="form-group">
+                    <label>Current Value (₹)</label>
+                    <input type="number" name="value" id="assetValue" min="0.01" step="0.01" required>
+                </div>
+                <div class="form-group">
+                    <label>Purchase Date (Optional)</label>
+                    <input type="date" name="date" id="assetDate">
+                </div>
+                <div class="form-group">
+                    <label>Notes (Optional)</label>
+                    <input type="text" name="notes" id="assetNotes" placeholder="Additional details">
+                </div>
+                <div class="form-actions">
+                    <button type="button" class="btn-secondary" onclick="closeModal('assetModal')">Cancel</button>
+                    <button type="submit" class="btn-primary" id="assetSubmitBtn">Add Asset</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <input type="file" id="importFileInput" accept=".json" style="display:none">
+
+    <script>
+        /**
+         * MoneyFlow Ultimate - Complete Finance Manager
+         * Coded by: Reinhard son Sangma
+         * 2026
+         */
+
+        const BROKERAGE = 20; // ₹20 per transaction
+        const CATEGORIES = {
+            income: ['Salary', 'Business', 'Investment', 'Freelance', 'Gift', 'Other'],
+            expense: ['Food', 'Transport', 'Shopping', 'Bills', 'Entertainment', 'Health', 'Education', 'Rent', 'Other']
+        };
+
+        const Utils = {
+            formatCurrency(n) { 
+                return '₹' + parseFloat(n).toLocaleString('en-IN', {minimumFractionDigits: 2, maximumFractionDigits: 2}); 
+            },
+            formatDate(d) { return new Date(d).toLocaleDateString('en-IN'); },
+            showNotif(msg, type='success') {
+                const n = document.createElement('div');
+                n.style.cssText = `position:fixed;top:100px;right:20px;padding:1rem 2rem;background:${type==='error'?'#f5576c':'#0ba360'};color:white;border-radius:16px;z-index:3000;box-shadow:0 8px 32px rgba(0,0,0,0.3)`;
+                n.textContent = msg;
+                document.body.appendChild(n);
+                setTimeout(() => n.remove(), 3000);
+            }
+        };
+
+        function openModal(id) { document.getElementById(id).classList.add('active'); }
+        function closeModal(id) { 
+            document.getElementById(id).classList.remove('active');
+            const forms = ['txnForm', 'stockForm', 'foForm', 'editBalanceForm'];
+            forms.forEach(f => {
+                const form = document.getElementById(f);
+                if (form) form.reset();
+            });
+            ['editTxnId', 'editStockId', 'editFOId'].forEach(id => {
+                const el = document.getElementById(id);
+                if (el) el.value = '';
+            });
+        }
+
+        function updateCategories() {
+            const type = document.querySelector('input[name="type"]:checked').value;
+            const select = document.getElementById('txnCategory');
+            select.innerHTML = CATEGORIES[type].map(c => `<option value="${c}">${c}</option>`).join('');
+        }
+
+        class AccountManager {
+            constructor() {
+                this.accounts = JSON.parse(localStorage.getItem('accounts') || '[{"id":"cash","name":"Cash","type":"cash","balance":0},{"id":"bank","name":"Bank","type":"bank","balance":0},{"id":"demat","name":"Demat","type":"demat","balance":0}]');
+            }
+            save() { localStorage.setItem('accounts', JSON.stringify(this.accounts)); }
+            get(id) { return this.accounts.find(a => a.id === id); }
+            updateBalance(id, amt, op) {
+                const acc = this.get(id);
+                if (!acc) return false;
+                const amount = parseFloat(amt);
+                acc.balance = parseFloat(acc.balance);
+                if (op === 'add') {
+                    acc.balance += amount;
+                } else {
+                    if (acc.balance < amount) {
+                        Utils.showNotif('Insufficient balance!', 'error');
+                        return false;
+                    }
+                    acc.balance -= amount;
+                }
+                this.save();
+                return true;
+            }
+            setBalance(id, newBalance, reason) {
+                const acc = this.get(id);
+                if (!acc) return false;
+                const oldBalance = parseFloat(acc.balance);
+                acc.balance = parseFloat(newBalance);
+                this.save();
+                
+                if (id === 'demat') {
+                    const diff = acc.balance - oldBalance;
+                    window.dematHistory.recordBalanceEdit(diff, reason);
+                }
+                
+                Utils.showNotif(`Balance updated! ${reason}`);
+                window.achievements.check();
+                return true;
+            }
+            transfer(from, to, amt) {
+                const f = this.get(from), t = this.get(to);
+                const amount = parseFloat(amt);
+                if (!f || !t) return false;
+                if (parseFloat(f.balance) < amount) {
+                    Utils.showNotif('Insufficient balance!', 'error');
+                    return false;
+                }
+                f.balance = parseFloat(f.balance) - amount;
+                t.balance = parseFloat(t.balance) + amount;
+                this.save();
+                return true;
+            }
+            getByType(type) { 
+                return this.accounts.filter(a => a.type === type).reduce((s, a) => s + parseFloat(a.balance || 0), 0); 
+            }
+        }
+
+        class TransactionManager {
+            constructor() {
+                this.txns = JSON.parse(localStorage.getItem('txns') || '[]');
+            }
+            save() { localStorage.setItem('txns', JSON.stringify(this.txns)); }
+            add(type, amt, acc, category, notes, date) {
+                const amount = parseFloat(amt);
+                this.txns.unshift({id: Date.now(), type, amount, accountId: acc, category, notes, date});
+                this.save();
+                window.acct.updateBalance(acc, amount, type === 'income' ? 'add' : 'subtract');
+                window.achievements.check();
+            }
+            update(id, type, amt, acc, category, notes, date) {
+                const txn = this.txns.find(t => t.id == id);
+                if (!txn) return false;
+                window.acct.updateBalance(txn.accountId, txn.amount, txn.type === 'income' ? 'subtract' : 'add');
+                txn.type = type;
+                txn.amount = parseFloat(amt);
+                txn.accountId = acc;
+                txn.category = category;
+                txn.notes = notes;
+                txn.date = date;
+                this.save();
+                window.acct.updateBalance(acc, parseFloat(amt), type === 'income' ? 'add' : 'subtract');
+                Utils.showNotif('Transaction updated!');
+                return true;
+            }
+            delete(id) {
+                const index = this.txns.findIndex(t => t.id == id);
+                if (index === -1) return false;
+                const txn = this.txns[index];
+                window.acct.updateBalance(txn.accountId, txn.amount, txn.type === 'income' ? 'subtract' : 'add');
+                this.txns.splice(index, 1);
+                this.save();
+                Utils.showNotif('Transaction deleted!');
+                return true;
+            }
+            getMonthly(year, month) {
+                return this.txns.filter(t => {
+                    const d = new Date(t.date);
+                    return d.getFullYear() === year && d.getMonth() === month;
+                });
+            }
+        }
+
+        class DematHistory {
+            constructor() {
+                this.history = JSON.parse(localStorage.getItem('dematHistory') || '[]');
+            }
+            save() { localStorage.setItem('dematHistory', JSON.stringify(this.history)); }
+            
+            recordBuy(stockName, shares, buyPrice, totalCost, brokerage) {
+                this.history.unshift({
+                    id: Date.now(),
+                    type: 'buy',
+                    stockName,
+                    shares,
+                    price: buyPrice,
+                    amount: totalCost,
+                    brokerage,
+                    total: totalCost + brokerage,
+                    date: new Date().toISOString().split('T')[0],
+                    notes: `Bought ${shares} shares @ ${Utils.formatCurrency(buyPrice)}`
+                });
+                this.save();
+            }
+            
+            recordSell(stockName, shares, sellPrice, totalValue, brokerage) {
+                this.history.unshift({
+                    id: Date.now(),
+                    type: 'sell',
+                    stockName,
+                    shares,
+                    price: sellPrice,
+                    amount: totalValue,
+                    brokerage,
+                    total: totalValue - brokerage,
+                    date: new Date().toISOString().split('T')[0],
+                    notes: `Sold ${shares} shares @ ${Utils.formatCurrency(sellPrice)}`
+                });
+                this.save();
+            }
+            
+            recordBalanceEdit(amount, reason) {
+                this.history.unshift({
+                    id: Date.now(),
+                    type: 'balance_edit',
+                    amount,
+                    date: new Date().toISOString().split('T')[0],
+                    notes: `Balance Correction: ${reason}`
+                });
+                this.save();
+            }
+            
+            getTotalCredited() {
+                return this.history
+                    .filter(h => h.type === 'sell' || (h.type === 'balance_edit' && h.amount > 0))
+                    .reduce((sum, h) => sum + (h.total || h.amount || 0), 0);
+            }
+            
+            getTotalDebited() {
+                return this.history
+                    .filter(h => h.type === 'buy' || (h.type === 'balance_edit' && h.amount < 0))
+                    .reduce((sum, h) => sum + Math.abs(h.total || h.amount || 0), 0);
+            }
+            
+            getTotalBrokerage() {
+                return this.history
+                    .filter(h => h.brokerage)
+                    .reduce((sum, h) => sum + h.brokerage, 0);
+            }
+        }
+
+        class StockManager {
+            constructor() {
+                this.stocks = JSON.parse(localStorage.getItem('stocks') || '[]');
+            }
+            save() { localStorage.setItem('stocks', JSON.stringify(this.stocks)); }
+            
+            add(company, symbol, shares, buy, current) {
+                const totalCost = parseFloat(shares) * parseFloat(buy);
+                const totalWithBrokerage = totalCost + BROKERAGE;
+                
+                if (!window.acct.updateBalance('demat', totalWithBrokerage, 'subtract')) {
+                    return false;
+                }
+                
+                this.stocks.push({
+                    id: Date.now(), 
+                    company, 
+                    symbol, 
+                    shares: parseFloat(shares), 
+                    buyPrice: parseFloat(buy), 
+                    currentPrice: parseFloat(current)
+                });
+                this.save();
+                
+                window.dematHistory.recordBuy(company, shares, buy, totalCost, BROKERAGE);
+                
+                Utils.showNotif(`Stock purchased! ${Utils.formatCurrency(totalWithBrokerage)} deducted (₹20 brokerage)`);
+                window.achievements.check();
+                return true;
+            }
+            
+            update(id, company, symbol, shares, buyPrice, currentPrice) {
+                const stock = this.stocks.find(s => s.id == id);
+                if (!stock) return false;
+                
+                const oldCost = stock.shares * stock.buyPrice + BROKERAGE;
+                const newCost = parseFloat(shares) * parseFloat(buyPrice) + BROKERAGE;
+                const diff = newCost - oldCost;
+                
+                if (diff > 0) {
+                    if (!window.acct.updateBalance('demat', diff, 'subtract')) return false;
+                } else if (diff < 0) {
+                    window.acct.updateBalance('demat', Math.abs(diff), 'add');
+                }
+                
+                stock.company = company;
+                stock.symbol = symbol;
+                stock.shares = parseFloat(shares);
+                stock.buyPrice = parseFloat(buyPrice);
+                stock.currentPrice = parseFloat(currentPrice);
+                this.save();
+                Utils.showNotif('Stock updated!');
+                return true;
+            }
+            
+            delete(id) {
+                const index = this.stocks.findIndex(s => s.id == id);
+                if (index === -1) return false;
+                
+                const stock = this.stocks[index];
+                const currentValue = stock.shares * stock.currentPrice;
+                const netAmount = currentValue - BROKERAGE;
+                
+                window.acct.updateBalance('demat', netAmount, 'add');
+                window.dematHistory.recordSell(stock.company, stock.shares, stock.currentPrice, currentValue, BROKERAGE);
+                
+                this.stocks.splice(index, 1);
+                this.save();
+                
+                Utils.showNotif(`Stock sold! ${Utils.formatCurrency(netAmount)} added (₹20 brokerage)`);
+                return true;
+            }
+            
+            getTotalPL() {
+                return this.stocks.reduce((s, st) => s + (st.shares * (st.currentPrice - st.buyPrice)), 0);
+            }
+        }
+
+        class FOManager {
+            constructor() {
+                this.trades = JSON.parse(localStorage.getItem('fo') || '[]');
+            }
+            save() { localStorage.setItem('fo', JSON.stringify(this.trades)); }
+            add(instrument, pl, date, notes='') {
+                this.trades.unshift({id: Date.now(), instrument, pl: parseFloat(pl), date, notes});
+                this.save();
+                window.achievements.check();
+            }
+            update(id, instrument, pl, date, notes='') {
+                const trade = this.trades.find(t => t.id == id);
+                if (!trade) return false;
+                trade.instrument = instrument;
+                trade.pl = parseFloat(pl);
+                trade.date = date;
+                trade.notes = notes;
+                this.save();
+                Utils.showNotif('Trade updated!');
+                return true;
+            }
+            delete(id) {
+                const index = this.trades.findIndex(t => t.id == id);
+                if (index === -1) return false;
+                this.trades.splice(index, 1);
+                this.save();
+                Utils.showNotif('Trade deleted!');
+                return true;
+            }
+            getTotalPL() { return this.trades.reduce((s, t) => s + parseFloat(t.pl), 0); }
+        }
+
+        class GoalManager {
+            constructor() {
+                this.goals = JSON.parse(localStorage.getItem('goals') || '[]');
+            }
+            save() { localStorage.setItem('goals', JSON.stringify(this.goals)); }
+            add(name, target, current) {
+                this.goals.push({id: Date.now(), name, target: parseFloat(target), current: parseFloat(current)});
+                this.save();
+                Utils.showNotif('Goal added!');
+            }
+            delete(id) {
+                const index = this.goals.findIndex(g => g.id == id);
+                if (index === -1) return false;
+                this.goals.splice(index, 1);
+                this.save();
+                Utils.showNotif('Goal deleted!');
+                return true;
+            }
+        }
+
+        class AssetManager {
+            constructor() {
+                this.assets = JSON.parse(localStorage.getItem('assets') || '[]');
+            }
+            save() { localStorage.setItem('assets', JSON.stringify(this.assets)); }
+            
+            add(type, name, value, date, notes) {
+                this.assets.push({
+                    id: Date.now(),
+                    type,
+                    name,
+                    value: parseFloat(value),
+                    purchaseDate: date,
+                    notes
+                });
+                this.save();
+                Utils.showNotif('Asset added!');
+                window.achievements.check();
+            }
+            
+            update(id, type, name, value, date, notes) {
+                const asset = this.assets.find(a => a.id == id);
+                if (!asset) return false;
+                asset.type = type;
+                asset.name = name;
+                asset.value = parseFloat(value);
+                asset.purchaseDate = date;
+                asset.notes = notes;
+                this.save();
+                Utils.showNotif('Asset updated!');
+                return true;
+            }
+            
+            delete(id) {
+                const index = this.assets.findIndex(a => a.id == id);
+                if (index === -1) return false;
+                this.assets.splice(index, 1);
+                this.save();
+                Utils.showNotif('Asset deleted!');
+                return true;
+            }
+            
+            getTotalByType(type) {
+                return this.assets.filter(a => a.type === type).reduce((s, a) => s + parseFloat(a.value || 0), 0);
+            }
+            
+            getTotalValue() {
+                return this.assets.reduce((s, a) => s + parseFloat(a.value || 0), 0);
+            }
+        }
+
+        class NetWorthTracker {
+            constructor() {
+                this.history = JSON.parse(localStorage.getItem('networthHistory') || '[]');
+            }
+            save() { localStorage.setItem('networthHistory', JSON.stringify(this.history)); }
+            record() {
+                const date = new Date().toISOString().split('T')[0];
+                const networth = window.acct.getByType('cash') + window.acct.getByType('bank') + window.acct.getByType('demat') + window.assets.getTotalValue();
+                
+                if (!this.history.some(h => h.date === date)) {
+                    this.history.push({date, networth});
+                    this.history = this.history.slice(-30);
+                    this.save();
+                }
+            }
+        }
+
+        class BudgetManager {
+            constructor() {
+                this.budgets = JSON.parse(localStorage.getItem('budgets') || '{}');
+            }
+            save() { localStorage.setItem('budgets', JSON.stringify(this.budgets)); }
+            set(category, limit) {
+                this.budgets[category] = parseFloat(limit);
+                this.save();
+                Utils.showNotif('Budget set!');
+            }
+            getSpent(category) {
+                const now = new Date();
+                const monthTxns = window.txn.getMonthly(now.getFullYear(), now.getMonth());
+                return monthTxns.filter(t => t.type === 'expense' && t.category === category)
+                    .reduce((s, t) => s + parseFloat(t.amount), 0);
+            }
+        }
+
+        class AchievementSystem {
+            constructor() {
+                this.achievements = JSON.parse(localStorage.getItem('achievements') || '[]');
+            }
+            save() { localStorage.setItem('achievements', JSON.stringify(this.achievements)); }
+            
+            check() {
+                const newAchievements = [];
+                const networth = window.acct.getByType('cash') + window.acct.getByType('bank') + window.acct.getByType('demat');
+                
+                if (networth >= 10000 && !this.has('first10k')) {
+                    newAchievements.push({id: 'first10k', title: '🎯 First ₹10,000', date: new Date().toISOString()});
+                }
+                if (networth >= 100000 && !this.has('first1L')) {
+                    newAchievements.push({id: 'first1L', title: '💎 First ₹1,00,000', date: new Date().toISOString()});
+                }
+                if (window.txn.txns.length >= 100 && !this.has('100txns')) {
+                    newAchievements.push({id: '100txns', title: '📊 100 Transactions', date: new Date().toISOString()});
+                }
+                if (window.stock.stocks.length >= 5 && !this.has('5stocks')) {
+                    newAchievements.push({id: '5stocks', title: '📈 5 Stock Portfolio', date: new Date().toISOString()});
+                }
+                
+                newAchievements.forEach(a => {
+                    this.achievements.push(a);
+                    Utils.showNotif(`🏆 Achievement Unlocked: ${a.title}`);
+                });
+                
+                if (newAchievements.length > 0) this.save();
+            }
+            
+            has(id) {
+                return this.achievements.some(a => a.id === id);
+            }
+            
+            display() {
+                const div = document.getElementById('achievementDisplay');
+                if (!div) return;
+                div.innerHTML = this.achievements.length ? 
+                    '<h3 style="margin-bottom:1rem;">🏆 Achievements</h3>' +
+                    this.achievements.map(a => `<span class="achievement-badge">${a.title}</span>`).join('') : '';
+            }
+        }
+
+        // Initialize managers
+        const acct = new AccountManager();
+        const txn = new TransactionManager();
+        const stock = new StockManager();
+        const fo = new FOManager();
+        const goals = new GoalManager();
+        const tracker = new NetWorthTracker();
+        const dematHistory = new DematHistory();
+        const budget = new BudgetManager();
+        const achievements = new AchievementSystem();
+        const assets = new AssetManager();
+
+        window.acct = acct;
+        window.txn = txn;
+        window.stock = stock;
+        window.fo = fo;
+        window.goals = goals;
+        window.tracker = tracker;
+        window.dematHistory = dematHistory;
+        window.budget = budget;
+        window.achievements = achievements;
+        window.assets = assets;
+
+        // Quick Actions
+        function quickAddIncome() {
+            document.getElementById('txnAccount').innerHTML = acct.accounts.map(a => `<option value="${a.id}">${a.name}</option>`).join('');
+            document.querySelector('[name="type"][value="income"]').checked = true;
+            updateCategories();
+            document.getElementById('txnDate').value = new Date().toISOString().split('T')[0];
+            openModal('txnModal');
+        }
+
+        function quickAddExpense() {
+            document.getElementById('txnAccount').innerHTML = acct.accounts.map(a => `<option value="${a.id}">${a.name}</option>`).join('');
+            document.querySelector('[name="type"][value="expense"]').checked = true;
+            updateCategories();
+            document.getElementById('txnDate').value = new Date().toISOString().split('T')[0];
+            openModal('txnModal');
+        }
+
+        function quickTransfer() {
+            const sel = acct.accounts.map(a => `<option value="${a.id}">${a.name} (${Utils.formatCurrency(a.balance)})</option>`).join('');
+            document.getElementById('transferFrom').innerHTML = sel;
+            document.getElementById('transferTo').innerHTML = sel;
+            openModal('transferModal');
+        }
+
+        function generateMonthlyReport() {
+            const now = new Date();
+            const monthTxns = txn.getMonthly(now.getFullYear(), now.getMonth());
+            const income = monthTxns.filter(t => t.type === 'income').reduce((s, t) => s + parseFloat(t.amount), 0);
+            const expense = monthTxns.filter(t => t.type === 'expense').reduce((s, t) => s + parseFloat(t.amount), 0);
+            const savings = income - expense;
+            
+            alert(`📊 Monthly Report (${now.toLocaleDateString('en', {month: 'long', year: 'numeric'})})\n\n` +
+                  `Income: ${Utils.formatCurrency(income)}\n` +
+                  `Expense: ${Utils.formatCurrency(expense)}\n` +
+                  `Savings: ${Utils.formatCurrency(savings)}\n` +
+                  `Savings Rate: ${income > 0 ? ((savings/income)*100).toFixed(1) : 0}%`);
+        }
+
+        function generatePDFReport() {
+            const now = new Date();
+            const monthTxns = txn.getMonthly(now.getFullYear(), now.getMonth());
+            const income = monthTxns.filter(t => t.type === 'income').reduce((s, t) => s + parseFloat(t.amount), 0);
+            const expense = monthTxns.filter(t => t.type === 'expense').reduce((s, t) => s + parseFloat(t.amount), 0);
+            const savings = income - expense;
+            const savingsRate = income > 0 ? ((savings/income)*100).toFixed(1) : 0;
+            
+            const monthName = now.toLocaleDateString('en', {month: 'long', year: 'numeric'});
+            let csv = `MoneyFlow Monthly Report - ${monthName}\n\n`;
+            csv += `Summary\n`;
+            csv += `Income,${income}\n`;
+            csv += `Expense,${expense}\n`;
+            csv += `Savings,${savings}\n`;
+            csv += `Savings Rate,${savingsRate}%\n\n`;
+            
+            csv += `Detailed Transactions\n`;
+            csv += `Date,Type,Category,Amount,Notes\n`;
+            monthTxns.forEach(t => {
+                csv += `${t.date},${t.type},${t.category},${t.amount},"${t.notes || ''}"\n`;
+            });
+            
+            csv += `\nAssets Summary\n`;
+            csv += `Type,Total Value\n`;
+            csv += `Cash,${acct.getByType('cash')}\n`;
+            csv += `Bank,${acct.getByType('bank')}\n`;
+            csv += `Demat,${acct.getByType('demat')}\n`;
+            csv += `Fixed Deposits,${assets.getTotalByType('fd')}\n`;
+            csv += `Insurance,${assets.getTotalByType('insurance')}\n`;
+            csv += `Property,${assets.getTotalByType('property')}\n`;
+            csv += `Vehicles,${assets.getTotalByType('bike') + assets.getTotalByType('car')}\n`;
+            csv += `Total Net Worth,${acct.getByType('cash') + acct.getByType('bank') + acct.getByType('demat') + assets.getTotalValue()}\n`;
+            
+            const blob = new Blob([csv], {type: 'text/csv'});
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `moneyflow-report-${now.toISOString().split('T')[0]}.csv`;
+            a.click();
+            Utils.showNotif('Monthly report downloaded!');
+        }
+
+        function exportDematPDF() {
+            const csv = 'Date,Type,Stock,Shares,Price,Amount,Brokerage,Total,Notes\n' + 
+                dematHistory.history.map(h => `${h.date},${h.type},${h.stockName || 'Balance Edit'},${h.shares || ''},${h.price || ''},${h.amount || ''},${h.brokerage || ''},${h.total || h.amount || ''},"${h.notes || ''}"`).join('\n');
+            const blob = new Blob([csv], {type: 'text/csv'});
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `demat-history-${new Date().toISOString().split('T')[0]}.csv`;
+            a.click();
+            Utils.showNotif('Demat history exported!');
+        }
+
+        // Dashboard
+        function updateDashboard() {
+            document.getElementById('cashBalance').textContent = Utils.formatCurrency(acct.getByType('cash'));
+            document.getElementById('bankBalance').textContent = Utils.formatCurrency(acct.getByType('bank'));
+            document.getElementById('dematBalance').textContent = Utils.formatCurrency(acct.getByType('demat'));
+            const net = acct.getByType('cash') + acct.getByType('bank') + acct.getByType('demat') + assets.getTotalValue();
+            document.getElementById('totalNetWorth').textContent = Utils.formatCurrency(net);
+            
+            const now = new Date();
+            const monthTxns = txn.getMonthly(now.getFullYear(), now.getMonth());
+            const income = monthTxns.filter(t => t.type === 'income').reduce((s, t) => s + parseFloat(t.amount), 0);
+            const expense = monthTxns.filter(t => t.type === 'expense').reduce((s, t) => s + parseFloat(t.amount), 0);
+            const savings = income - expense;
+            const savingsRate = income > 0 ? ((savings / income) * 100).toFixed(1) : 0;
+            
+            document.getElementById('monthlyIncome').textContent = Utils.formatCurrency(income);
+            document.getElementById('monthlyExpense').textContent = Utils.formatCurrency(expense);
+            document.getElementById('savingsRate').textContent = savingsRate + '%';
+            document.getElementById('totalPL').textContent = Utils.formatCurrency(stock.getTotalPL() + fo.getTotalPL());
+            
+            // Stock investment tracking
+            const stockInvested = stock.stocks.reduce((sum, s) => sum + (parseFloat(s.shares) * parseFloat(s.buyPrice)), 0);
+            const stockCurrentValue = stock.stocks.reduce((sum, s) => sum + (parseFloat(s.shares) * parseFloat(s.currentPrice)), 0);
+            const stockProfit = stockCurrentValue - stockInvested;
+            const stockGrowthPercent = stockInvested > 0 ? ((stockProfit / stockInvested) * 100).toFixed(2) : 0;
+            
+            document.getElementById('stockInvested').textContent = Utils.formatCurrency(stockInvested);
+            document.getElementById('stockCurrentValue').textContent = Utils.formatCurrency(stockCurrentValue);
+            document.getElementById('stockProfit').textContent = Utils.formatCurrency(stockProfit);
+            const growthSign = stockGrowthPercent >= 0 ? '+' : '';
+            document.getElementById('stockGrowth').textContent = growthSign + stockGrowthPercent + '%';
+            document.getElementById('stockGrowth').style.color = stockGrowthPercent >= 0 ? '#0ba360' : '#f5576c';
+            document.getElementById('stockProfit').style.color = stockProfit >= 0 ? '#0ba360' : '#f5576c';
+
+            tracker.record();
+            achievements.display();
+            createCharts();
+        }
+
+        function createCharts() {
+            const ctx1 = document.getElementById('networthPieChart');
+            if (ctx1 && window.Chart) {
+                const cash = acct.getByType('cash');
+                const bank = acct.getByType('bank');
+                const demat = acct.getByType('demat');
+                
+                if (ctx1.chart) ctx1.chart.destroy();
+                ctx1.chart = new Chart(ctx1, {
+                    type: 'pie',
+                    data: {
+                        labels: ['Cash', 'Bank', 'Demat'],
+                        datasets: [{
+                            data: [cash, bank, demat],
+                            backgroundColor: ['#667eea', '#4facfe', '#0ba360']
+                        }]
+                    }
+                });
+            }
+
+            const ctx2 = document.getElementById('growthChart');
+            if (ctx2 && window.Chart && tracker.history.length) {
+                if (ctx2.chart) ctx2.chart.destroy();
+                ctx2.chart = new Chart(ctx2, {
+                    type: 'line',
+                    data: {
+                        labels: tracker.history.map(h => new Date(h.date).toLocaleDateString('en', {month: 'short', day: 'numeric'})),
+                        datasets: [{
+                            label: 'Net Worth',
+                            data: tracker.history.map(h => h.networth),
+                            borderColor: '#667eea',
+                            backgroundColor: 'rgba(102, 126, 234, 0.1)',
+                            fill: true,
+                            tension: 0.4
+                        }]
+                    }
+                });
+            }
+
+            const ctx3 = document.getElementById('incomeExpenseChart');
+            if (ctx3 && window.Chart) {
+                const data = [];
+                for(let i = 5; i >= 0; i--) {
+                    const d = new Date();
+                    d.setMonth(d.getMonth() - i);
+                    const m = txn.getMonthly(d.getFullYear(), d.getMonth());
+                    data.push({
+                        month: d.toLocaleDateString('en', {month: 'short'}),
+                        income: m.filter(t => t.type === 'income').reduce((s,t) => s + parseFloat(t.amount), 0),
+                        expense: m.filter(t => t.type === 'expense').reduce((s,t) => s + parseFloat(t.amount), 0)
+                    });
+                }
+                
+                if (ctx3.chart) ctx3.chart.destroy();
+                ctx3.chart = new Chart(ctx3, {
+                    type: 'bar',
+                    data: {
+                        labels: data.map(d => d.month),
+                        datasets: [{
+                            label: 'Income',
+                            data: data.map(d => d.income),
+                            backgroundColor: '#0ba360'
+                        },{
+                            label: 'Expense',
+                            data: data.map(d => d.expense),
+                            backgroundColor: '#f5576c'
+                        }]
+                    }
+                });
+            }
+
+            const ctx4 = document.getElementById('categoryChart');
+            if (ctx4 && window.Chart) {
+                const expenses = txn.txns.filter(t => t.type === 'expense');
+                const categoryTotals = {};
+                expenses.forEach(t => {
+                    categoryTotals[t.category] = (categoryTotals[t.category] || 0) + parseFloat(t.amount);
+                });
+                
+                if (ctx4.chart) ctx4.chart.destroy();
+                ctx4.chart = new Chart(ctx4, {
+                    type: 'doughnut',
+                    data: {
+                        labels: Object.keys(categoryTotals),
+                        datasets: [{
+                            data: Object.values(categoryTotals),
+                            backgroundColor: ['#667eea', '#4facfe', '#0ba360', '#f093fb', '#fa709a', '#fee140', '#30cfd0', '#a8edea']
+                        }]
+                    }
+                });
+            }
+        }
+
+        // Accounts
+        function renderAccounts() {
+            document.getElementById('accountsList').innerHTML = acct.accounts.map(a => `
+                <div class="account-card">
+                    <h3>${a.name}</h3>
+                    <p style="color: var(--text-secondary); text-transform: uppercase; font-size: 0.9rem;">${a.type}</p>
+                    <p style="font-size: 2rem; font-weight: 700; font-family: var(--font-display); margin-top: 1rem;">${Utils.formatCurrency(a.balance)}</p>
+                    <div class="account-actions">
+                        <button class="btn-edit" onclick="editAccountBalance('${a.id}')">✏️ Edit Balance</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function editAccountBalance(id) {
+            const acc = acct.get(id);
+            if (!acc) return;
+            document.getElementById('editAccountId').value = id;
+            document.getElementById('editAccountName').value = acc.name;
+            document.getElementById('currentBalanceDisplay').value = Utils.formatCurrency(acc.balance);
+            document.getElementById('newBalance').value = acc.balance;
+            openModal('editBalanceModal');
+        }
+
+        // Transactions
+        function renderTransactions(filter = {}) {
+            let filtered = [...txn.txns];
+            
+            if (filter.search) {
+                const s = filter.search.toLowerCase();
+                filtered = filtered.filter(t => t.notes?.toLowerCase().includes(s) || t.category?.toLowerCase().includes(s));
+            }
+            if (filter.type && filter.type !== 'all') {
+                filtered = filtered.filter(t => t.type === filter.type);
+            }
+            if (filter.category && filter.category !== 'all') {
+                filtered = filtered.filter(t => t.category === filter.category);
+            }
+            if (filter.dateFrom) {
+                filtered = filtered.filter(t => t.date >= filter.dateFrom);
+            }
+            if (filter.dateTo) {
+                filtered = filtered.filter(t => t.date <= filter.dateTo);
+            }
+            
+            document.getElementById('transactionsList').innerHTML = filtered.length ? filtered.map(t => {
+                const acc = acct.get(t.accountId);
+                return `
+                    <div class="transaction-item">
+                        <div class="txn-icon ${t.type}">${t.type === 'income' ? '📈' : '💸'}</div>
+                        <div style="flex: 1;">
+                            <h4>${t.category}</h4>
+                            <p style="font-size: 0.9rem; color: var(--text-secondary);">${Utils.formatDate(t.date)} • ${acc?.name || 'Unknown'}</p>
+                            ${t.notes ? `<p style="font-size: 0.85rem; color: var(--text-secondary); margin-top: 0.25rem;">${t.notes}</p>` : ''}
+                        </div>
+                        <div class="txn-amount ${t.type}">${t.type === 'income' ? '+' : '-'}${Utils.formatCurrency(t.amount)}</div>
+                        <div style="display: flex; gap: 0.5rem;">
+                            <button class="btn-edit" onclick="editTransaction(${t.id})">✏️</button>
+                            <button class="btn-delete" onclick="deleteTransaction(${t.id})">🗑️</button>
+                        </div>
+                    </div>
+                `;
+            }).join('') : '<p style="text-align:center;padding:3rem;color:var(--text-secondary)">No transactions found</p>';
+        }
+
+        function editTransaction(id) {
+            const t = txn.txns.find(tx => tx.id == id);
+            if (!t) return;
+            document.getElementById('editTxnId').value = id;
+            document.querySelector(`input[name="type"][value="${t.type}"]`).checked = true;
+            updateCategories();
+            document.getElementById('txnAccount').value = t.accountId;
+            document.getElementById('txnCategory').value = t.category;
+            document.getElementById('txnAmount').value = t.amount;
+            document.getElementById('txnDate').value = t.date;
+            document.getElementById('txnNotes').value = t.notes || '';
+            document.getElementById('txnModalTitle').textContent = 'Edit Transaction';
+            document.getElementById('txnSubmitBtn').textContent = 'Update';
+            openModal('txnModal');
+        }
+
+        function deleteTransaction(id) {
+            if (confirm('Delete this transaction?')) {
+                txn.delete(id);
+                updateDashboard();
+                renderTransactions();
+            }
+        }
+
+        // Demat History
+        function renderDematHistory() {
+            document.getElementById('totalCredited').textContent = Utils.formatCurrency(dematHistory.getTotalCredited());
+            document.getElementById('totalDebited').textContent = Utils.formatCurrency(dematHistory.getTotalDebited());
+            document.getElementById('totalBrokerage').textContent = Utils.formatCurrency(dematHistory.getTotalBrokerage());
+            const netFlow = dematHistory.getTotalCredited() - dematHistory.getTotalDebited();
+            document.getElementById('netFlow').textContent = Utils.formatCurrency(netFlow);
+            
+            document.getElementById('dematHistoryList').innerHTML = dematHistory.history.length ? 
+                dematHistory.history.map(h => `
+                    <div class="demat-history-item">
+                        <div class="demat-icon ${h.type}">${h.type === 'buy' ? '🔻' : h.type === 'sell' ? '🔺' : '✏️'}</div>
+                        <div style="flex: 1;">
+                            <h4>${h.stockName || 'Balance Edit'}</h4>
+                            <p style="font-size: 0.9rem; color: var(--text-secondary);">${Utils.formatDate(h.date)}</p>
+                            <p style="font-size: 0.85rem; color: var(--text-secondary); margin-top: 0.25rem;">${h.notes}</p>
+                            ${h.brokerage ? `<p style="font-size: 0.8rem; color: orange; margin-top: 0.25rem;">Brokerage: ${Utils.formatCurrency(h.brokerage)}</p>` : ''}
+                        </div>
+                        <div class="demat-amount ${h.type === 'buy' ? 'debit' : 'credit'}">
+                            ${h.type === 'buy' ? '-' : '+'}${Utils.formatCurrency(h.total || Math.abs(h.amount))}
+                        </div>
+                    </div>
+                `).join('') : 
+                '<p style="text-align:center;padding:3rem;color:var(--text-secondary)">No demat history yet</p>';
+        }
+
+        // Stocks
+        function renderStocks() {
+            document.getElementById('stocksList').innerHTML = stock.stocks.length ? stock.stocks.map(s => {
+                const pl = s.shares * (s.currentPrice - s.buyPrice);
+                const plPercent = ((s.currentPrice - s.buyPrice) / s.buyPrice * 100).toFixed(2);
+                return `
+                    <div class="stock-card">
+                        <h3>${s.company}</h3>
+                        <p style="color: var(--text-secondary); font-size: 0.9rem;">${s.symbol}</p>
+                        <div style="margin: 1rem 0; display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem;">
+                            <div><p style="font-size: 0.85rem; color: var(--text-secondary);">Shares</p><p style="font-weight: 600;">${s.shares}</p></div>
+                            <div><p style="font-size: 0.85rem; color: var(--text-secondary);">Buy Price</p><p style="font-weight: 600;">${Utils.formatCurrency(s.buyPrice)}</p></div>
+                            <div><p style="font-size: 0.85rem; color: var(--text-secondary);">Current</p><p style="font-weight: 600;">${Utils.formatCurrency(s.currentPrice)}</p></div>
+                            <div><p style="font-size: 0.85rem; color: var(--text-secondary);">Investment</p><p style="font-weight: 600;">${Utils.formatCurrency(s.shares * s.buyPrice)}</p></div>
+                        </div>
+                        <div style="padding: 1rem; border-radius: 16px; background: ${pl >= 0 ? 'rgba(11,163,96,0.15)' : 'rgba(245,87,108,0.15)'}; border: 2px solid ${pl >= 0 ? '#0ba360' : '#f5576c'}; margin-bottom: 1rem;">
+                            <p style="font-size: 0.85rem;">P/L</p>
+                            <p style="font-size: 1.5rem; font-weight: 700; color: ${pl >= 0 ? '#0ba360' : '#f5576c'};">${Utils.formatCurrency(pl)} (${plPercent}%)</p>
+                        </div>
+                        <div class="stock-actions">
+                            <button class="btn-edit" onclick="editStock(${s.id})">Edit</button>
+                            <button class="btn-delete" onclick="deleteStock(${s.id})">Sell</button>
+                        </div>
+                    </div>
+                `;
+            }).join('') : '<p style="text-align:center;padding:3rem;color:var(--text-secondary)">No stocks yet</p>';
+        }
+
+        function editStock(id) {
+            const s = stock.stocks.find(st => st.id == id);
+            if (!s) return;
+            document.getElementById('editStockId').value = id;
+            document.getElementById('stockCompany').value = s.company;
+            document.getElementById('stockSymbol').value = s.symbol;
+            document.getElementById('stockShares').value = s.shares;
+            document.getElementById('stockBuyPrice').value = s.buyPrice;
+            document.getElementById('stockCurrentPrice').value = s.currentPrice;
+            document.getElementById('stockModalTitle').textContent = 'Edit Stock';
+            document.getElementById('stockSubmitBtn').textContent = 'Update';
+            openModal('stockModal');
+        }
+
+        function deleteStock(id) {
+            if (confirm('Sell this stock? Current value will be added to Demat (₹20 brokerage).')) {
+                stock.delete(id);
+                updateDashboard();
+                renderStocks();
+                renderDematHistory();
+            }
+        }
+
+        // F&O
+        function renderFO() {
+            document.getElementById('foList').innerHTML = fo.trades.length ? fo.trades.map(t => `
+                <div class="fo-card">
+                    <div class="fo-icon">⚡</div>
+                    <div style="flex: 1;">
+                        <h4>${t.instrument}</h4>
+                        <p style="font-size: 0.9rem; color: var(--text-secondary);">${Utils.formatDate(t.date)}</p>
+                        ${t.notes ? `<p style="font-size: 0.85rem; color: var(--text-secondary); margin-top: 0.25rem;">${t.notes}</p>` : ''}
+                    </div>
+                    <div class="txn-amount ${t.pl >= 0 ? 'income' : 'expense'}">${Utils.formatCurrency(t.pl)}</div>
+                    <div style="display: flex; gap: 0.5rem;">
+                        <button class="btn-edit" onclick="editFO(${t.id})">✏️</button>
+                        <button class="btn-delete" onclick="deleteFO(${t.id})">🗑️</button>
+                    </div>
+                </div>
+            `).join('') : '<p style="text-align:center;padding:3rem;color:var(--text-secondary)">No F&O trades yet</p>';
+        }
+
+        function editFO(id) {
+            const t = fo.trades.find(tr => tr.id == id);
+            if (!t) return;
+            document.getElementById('editFOId').value = id;
+            document.getElementById('foInstrument').value = t.instrument;
+            document.getElementById('foPL').value = t.pl;
+            document.getElementById('foDate').value = t.date;
+            document.getElementById('foNotes').value = t.notes || '';
+            document.getElementById('foModalTitle').textContent = 'Edit F&O';
+            document.getElementById('foSubmitBtn').textContent = 'Update';
+            openModal('foModal');
+        }
+
+        function deleteFO(id) {
+            if (confirm('Delete this trade?')) {
+                fo.delete(id);
+                updateDashboard();
+                renderFO();
+            }
+        }
+
+        // Goals
+        function renderGoals() {
+            document.getElementById('goalsList').innerHTML = goals.goals.length ? goals.goals.map(g => {
+                const progress = (g.current / g.target * 100).toFixed(1);
+                return `
+                    <div class="goal-card">
+                        <div class="goal-header">
+                            <h3 class="goal-title">${g.name}</h3>
+                            <div style="display:flex;gap:0.5rem;">
+                                <button class="btn-edit" onclick="editGoal(${g.id})">✏️ Edit</button>
+                                <button class="btn-delete" onclick="deleteGoal(${g.id})">Delete</button>
+                            </div>
+                        </div>
+                        <div class="goal-progress">
+                            <div class="goal-progress-bar" style="width: ${Math.min(progress, 100)}%"></div>
+                        </div>
+                        <div class="goal-stats">
+                            <span>${Utils.formatCurrency(g.current)} / ${Utils.formatCurrency(g.target)}</span>
+                            <span>${progress}%</span>
+                        </div>
+                    </div>
+                `;
+            }).join('') : '<p style="text-align:center;padding:3rem;color:var(--text-secondary)">No goals yet. Add your first goal!</p>';
+        }
+
+        function editGoal(id) {
+            const g = goals.goals.find(goal => goal.id == id);
+            if (!g) return;
+            
+            const newName = prompt('Goal Name:', g.name);
+            if (!newName) return;
+            
+            const newTarget = prompt('Target Amount (₹):', g.target);
+            if (!newTarget || isNaN(newTarget)) return;
+            
+            const newCurrent = prompt('Current Amount (₹):', g.current);
+            if (newCurrent === null || isNaN(newCurrent)) return;
+            
+            g.name = newName;
+            g.target = parseFloat(newTarget);
+            g.current = parseFloat(newCurrent);
+            goals.save();
+            Utils.showNotif('Goal updated!');
+            renderGoals();
+        }
+
+        function deleteGoal(id) {
+            if (confirm('Delete this goal?')) {
+                goals.delete(id);
+                renderGoals();
+            }
+        }
+
+        // Budget
+        function renderBudget() {
+            const budgetHTML = Object.keys(budget.budgets).map(cat => {
+                const limit = budget.budgets[cat];
+                const spent = budget.getSpent(cat);
+                const percent = (spent / limit * 100).toFixed(1);
+                const isOver = spent > limit;
+                
+                return `
+                    <div class="goal-card">
+                        <div class="goal-header">
+                            <h3>${cat}</h3>
+                            <div style="display:flex;gap:0.5rem;">
+                                <button class="btn-edit" onclick="editBudget('${cat}', ${limit})">✏️ Edit</button>
+                                <button class="btn-delete" onclick="deleteBudget('${cat}')">Delete</button>
+                            </div>
+                        </div>
+                        <div class="goal-progress">
+                            <div class="goal-progress-bar" style="width: ${Math.min(percent, 100)}%; background: ${isOver ? 'var(--gradient-pink)' : 'var(--gradient-green)'}"></div>
+                        </div>
+                        <div class="goal-stats">
+                            <span>${Utils.formatCurrency(spent)} / ${Utils.formatCurrency(limit)}</span>
+                            <span style="color: ${isOver ? '#f5576c' : '#0ba360'}">${percent}%</span>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+            
+            document.getElementById('budgetDisplay').innerHTML = budgetHTML || '<p style="text-align:center;padding:3rem;color:var(--text-secondary)">No budgets set. Click "Set Budget" to start!</p>';
+        }
+
+        function editBudget(category, currentLimit) {
+            const newLimit = prompt(`Edit budget for ${category}:\nCurrent limit: ₹${currentLimit}`, currentLimit);
+            if (newLimit && !isNaN(newLimit) && parseFloat(newLimit) > 0) {
+                budget.set(category, parseFloat(newLimit));
+                renderBudget();
+            }
+        }
+
+        function deleteBudget(category) {
+            if (confirm(`Delete budget for ${category}?`)) {
+                delete budget.budgets[category];
+                budget.save();
+                Utils.showNotif('Budget deleted!');
+                renderBudget();
+            }
+        }
+
+        function renderAssets() {
+            document.getElementById('totalFD').textContent = Utils.formatCurrency(assets.getTotalByType('fd'));
+            document.getElementById('totalInsurance').textContent = Utils.formatCurrency(assets.getTotalByType('insurance'));
+            document.getElementById('totalProperty').textContent = Utils.formatCurrency(assets.getTotalByType('property'));
+            const vehicles = assets.getTotalByType('bike') + assets.getTotalByType('car');
+            document.getElementById('totalVehicles').textContent = Utils.formatCurrency(vehicles);
+            
+            const assetIcons = {
+                fd: '🏦',
+                insurance: '🛡️',
+                property: '🏠',
+                bike: '🏍️',
+                car: '🚗'
+            };
+            
+            const assetLabels = {
+                fd: 'Fixed Deposit',
+                insurance: 'Insurance',
+                property: 'Property',
+                bike: 'Bike',
+                car: 'Car'
+            };
+            
+            document.getElementById('assetsList').innerHTML = assets.assets.length ? 
+                assets.assets.map(a => `
+                    <div class="account-card">
+                        <div style="font-size: 2rem; margin-bottom: 1rem;">${assetIcons[a.type]}</div>
+                        <h3>${a.name}</h3>
+                        <p style="color: var(--text-secondary); font-size: 0.9rem; text-transform: uppercase;">${assetLabels[a.type]}</p>
+                        <p style="font-size: 2rem; font-weight: 700; font-family: var(--font-display); margin: 1rem 0;">${Utils.formatCurrency(a.value)}</p>
+                        ${a.notes ? `<p style="font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 1rem;">${a.notes}</p>` : ''}
+                        <div class="account-actions">
+                            <button class="btn-edit" onclick="editAsset(${a.id})">✏️ Edit</button>
+                            <button class="btn-delete" onclick="deleteAsset(${a.id})">🗑️ Delete</button>
+                        </div>
+                    </div>
+                `).join('') :
+                '<p style="text-align:center;padding:3rem;color:var(--text-secondary);grid-column:1/-1;">No assets yet. Add your first asset!</p>';
+        }
+
+        function editAsset(id) {
+            const a = assets.assets.find(asset => asset.id == id);
+            if (!a) return;
+            document.getElementById('editAssetId').value = id;
+            document.getElementById('assetType').value = a.type;
+            document.getElementById('assetName').value = a.name;
+            document.getElementById('assetValue').value = a.value;
+            document.getElementById('assetDate').value = a.purchaseDate || '';
+            document.getElementById('assetNotes').value = a.notes || '';
+            document.getElementById('assetModalTitle').textContent = 'Edit Asset';
+            document.getElementById('assetSubmitBtn').textContent = 'Update';
+            openModal('assetModal');
+        }
+
+        function deleteAsset(id) {
+            if (confirm('Delete this asset?')) {
+                assets.delete(id);
+                updateDashboard();
+                renderAssets();
+            }
+        }
+
+        // Navigation
+        document.querySelectorAll('.nav-link').forEach(link => {
+            link.addEventListener('click', e => {
+                e.preventDefault();
+                const sec = e.target.dataset.section;
+                document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
+                e.target.classList.add('active');
+                document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+                document.getElementById(sec).classList.add('active');
+                
+                if (sec === 'dashboard') updateDashboard();
+                else if (sec === 'accounts') renderAccounts();
+                else if (sec === 'transactions') {
+                    renderTransactions();
+                    const allCats = [...new Set(txn.txns.map(t => t.category))];
+                    document.getElementById('filterCategory').innerHTML = '<option value="all">All Categories</option>' + 
+                        allCats.map(c => `<option value="${c}">${c}</option>`).join('');
+                }
+                else if (sec === 'demat-history') renderDematHistory();
+                else if (sec === 'assets') renderAssets();
+                else if (sec === 'investments') renderStocks();
+                else if (sec === 'fo') renderFO();
+                else if (sec === 'goals') renderGoals();
+                else if (sec === 'budget') renderBudget();
+                else if (sec === 'about') { /* Static page */ }
+                else if (sec === 'terms') { /* Static page */ }
+            });
+        });
+
+        // Theme
+        const savedTheme = localStorage.getItem('theme');
+        if (savedTheme === 'dark') {
+            document.body.classList.add('dark-mode');
+            document.getElementById('themeToggle').textContent = '☀️';
+        }
+        
+        document.getElementById('themeToggle').addEventListener('click', () => {
+            document.body.classList.toggle('dark-mode');
+            const dark = document.body.classList.contains('dark-mode');
+            document.getElementById('themeToggle').textContent = dark ? '☀️' : '🌙';
+            localStorage.setItem('theme', dark ? 'dark' : 'light');
+        });
+
+        // Keyboard Shortcuts
+        document.addEventListener('keydown', e => {
+            if (e.altKey && e.key === 'i') { e.preventDefault(); quickAddIncome(); }
+            if (e.altKey && e.key === 'e') { e.preventDefault(); quickAddExpense(); }
+            if (e.altKey && e.key === 't') { e.preventDefault(); quickTransfer(); }
+        });
+
+        // Form Handlers
+        document.getElementById('editBalanceForm').addEventListener('submit', e => {
+            e.preventDefault();
+            const fd = new FormData(e.target);
+            const id = document.getElementById('editAccountId').value;
+            acct.setBalance(id, fd.get('newBalance'), fd.get('reason'));
+            closeModal('editBalanceModal');
+            updateDashboard();
+            renderAccounts();
+            renderDematHistory();
+        });
+
+        document.getElementById('transferBtn').addEventListener('click', () => {
+            const sel = acct.accounts.map(a => `<option value="${a.id}">${a.name} (${Utils.formatCurrency(a.balance)})</option>`).join('');
+            document.getElementById('transferFrom').innerHTML = sel;
+            document.getElementById('transferTo').innerHTML = sel;
+            openModal('transferModal');
+        });
+
+        document.getElementById('transferForm').addEventListener('submit', e => {
+            e.preventDefault();
+            const fd = new FormData(e.target);
+            if (acct.transfer(fd.get('from'), fd.get('to'), fd.get('amount'))) {
+                Utils.showNotif('Transfer successful!');
+                closeModal('transferModal');
+                e.target.reset();
+                updateDashboard();
+            }
+        });
+
+        document.getElementById('addTransactionBtn').addEventListener('click', () => {
+            document.getElementById('txnAccount').innerHTML = acct.accounts.map(a => `<option value="${a.id}">${a.name}</option>`).join('');
+            updateCategories();
+            document.getElementById('txnDate').value = new Date().toISOString().split('T')[0];
+            openModal('txnModal');
+        });
+
+        document.getElementById('txnForm').addEventListener('submit', e => {
+            e.preventDefault();
+            const fd = new FormData(e.target);
+            const editId = document.getElementById('editTxnId').value;
+            
+            if (editId) {
+                txn.update(parseInt(editId), fd.get('type'), fd.get('amount'), fd.get('account'), fd.get('category'), fd.get('notes'), fd.get('date'));
+            } else {
+                txn.add(fd.get('type'), fd.get('amount'), fd.get('account'), fd.get('category'), fd.get('notes'), fd.get('date'));
+                Utils.showNotif('Transaction added!');
+            }
+            closeModal('txnModal');
+            e.target.reset();
+            updateDashboard();
+            renderTransactions();
+        });
+
+        // Transaction Filters
+        ['searchTxn', 'filterType', 'filterCategory', 'filterDateFrom', 'filterDateTo'].forEach(id => {
+            document.getElementById(id).addEventListener('change', () => {
+                renderTransactions({
+                    search: document.getElementById('searchTxn').value,
+                    type: document.getElementById('filterType').value,
+                    category: document.getElementById('filterCategory').value,
+                    dateFrom: document.getElementById('filterDateFrom').value,
+                    dateTo: document.getElementById('filterDateTo').value
+                });
+            });
+        });
+        document.getElementById('searchTxn').addEventListener('input', () => {
+            renderTransactions({
+                search: document.getElementById('searchTxn').value,
+                type: document.getElementById('filterType').value,
+                category: document.getElementById('filterCategory').value,
+                dateFrom: document.getElementById('filterDateFrom').value,
+                dateTo: document.getElementById('filterDateTo').value
+            });
+        });
+
+        document.getElementById('addStockBtn').addEventListener('click', () => openModal('stockModal'));
+
+        document.getElementById('stockForm').addEventListener('submit', e => {
+            e.preventDefault();
+            const fd = new FormData(e.target);
+            const editId = document.getElementById('editStockId').value;
+            
+            if (editId) {
+                stock.update(parseInt(editId), fd.get('company'), fd.get('symbol'), fd.get('shares'), fd.get('buyPrice'), fd.get('currentPrice'));
+            } else {
+                stock.add(fd.get('company'), fd.get('symbol'), fd.get('shares'), fd.get('buyPrice'), fd.get('currentPrice'));
+            }
+            closeModal('stockModal');
+            e.target.reset();
+            updateDashboard();
+            renderStocks();
+            renderDematHistory();
+        });
+
+        document.getElementById('addFOBtn').addEventListener('click', () => {
+            document.getElementById('foDate').value = new Date().toISOString().split('T')[0];
+            openModal('foModal');
+        });
+
+        document.getElementById('foForm').addEventListener('submit', e => {
+            e.preventDefault();
+            const fd = new FormData(e.target);
+            const editId = document.getElementById('editFOId').value;
+            
+            if (editId) {
+                fo.update(parseInt(editId), fd.get('instrument'), fd.get('pl'), fd.get('date'), fd.get('notes'));
+            } else {
+                fo.add(fd.get('instrument'), fd.get('pl'), fd.get('date'), fd.get('notes'));
+                Utils.showNotif('Trade added!');
+            }
+            closeModal('foModal');
+            e.target.reset();
+            updateDashboard();
+            renderFO();
+        });
+
+        document.getElementById('addGoalBtn').addEventListener('click', () => openModal('goalModal'));
+
+        document.getElementById('goalForm').addEventListener('submit', e => {
+            e.preventDefault();
+            const fd = new FormData(e.target);
+            goals.add(fd.get('name'), fd.get('target'), fd.get('current'));
+            closeModal('goalModal');
+            e.target.reset();
+            renderGoals();
+        });
+
+        document.getElementById('setBudgetBtn').addEventListener('click', () => openModal('budgetModal'));
+
+        document.getElementById('budgetForm').addEventListener('submit', e => {
+            e.preventDefault();
+            const fd = new FormData(e.target);
+            budget.set(fd.get('category'), fd.get('limit'));
+            closeModal('budgetModal');
+            e.target.reset();
+            renderBudget();
+        });
+
+        document.getElementById('addAssetBtn').addEventListener('click', () => {
+            document.getElementById('editAssetId').value = '';
+            document.getElementById('assetModalTitle').textContent = 'Add Asset';
+            document.getElementById('assetSubmitBtn').textContent = 'Add Asset';
+            document.getElementById('assetForm').reset();
+            openModal('assetModal');
+        });
+
+        document.getElementById('assetForm').addEventListener('submit', e => {
+            e.preventDefault();
+            const fd = new FormData(e.target);
+            const editId = document.getElementById('editAssetId').value;
+            
+            if (editId) {
+                assets.update(parseInt(editId), fd.get('type'), fd.get('name'), fd.get('value'), fd.get('date'), fd.get('notes'));
+            } else {
+                assets.add(fd.get('type'), fd.get('name'), fd.get('value'), fd.get('date'), fd.get('notes'));
+            }
+            closeModal('assetModal');
+            e.target.reset();
+            updateDashboard();
+            renderAssets();
+        });
+
+        // Export/Import
+        document.getElementById('exportCSVBtn').addEventListener('click', () => {
+            const csv = 'Date,Type,Category,Amount,Notes\n' + txn.txns.map(t => `${t.date},${t.type},${t.category},${t.amount},${t.notes || ''}`).join('\n');
+            const blob = new Blob([csv], {type: 'text/csv'});
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'transactions.csv';
+            a.click();
+            Utils.showNotif('CSV exported!');
+        });
+
+        document.getElementById('exportJSONBtn').addEventListener('click', () => {
+            const data = {
+                accounts: acct.accounts,
+                transactions: txn.txns,
+                stocks: stock.stocks,
+                foTrades: fo.trades,
+                goals: goals.goals,
+                assets: assets.assets,
+                networthHistory: tracker.history,
+                dematHistory: dematHistory.history,
+                budgets: budget.budgets,
+                achievements: achievements.achievements,
+                exportDate: new Date().toISOString()
+            };
+            const blob = new Blob([JSON.stringify(data, null, 2)], {type: 'application/json'});
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `moneyflow-backup-${new Date().toISOString().split('T')[0]}.json`;
+            a.click();
+            Utils.showNotif('Full backup exported!');
+        });
+
+        document.getElementById('importJSONBtn').addEventListener('click', () => {
+            document.getElementById('importFileInput').click();
+        });
+
+        document.getElementById('importFileInput').addEventListener('change', e => {
+            const file = e.target.files[0];
+            if (!file) return;
+            
+            const reader = new FileReader();
+            reader.onload = function(event) {
+                try {
+                    const data = JSON.parse(event.target.result);
+                    if (confirm('This will replace all current data. Continue?')) {
+                        localStorage.setItem('accounts', JSON.stringify(data.accounts || []));
+                        localStorage.setItem('txns', JSON.stringify(data.transactions || []));
+                        localStorage.setItem('stocks', JSON.stringify(data.stocks || []));
+                        localStorage.setItem('fo', JSON.stringify(data.foTrades || []));
+                        localStorage.setItem('goals', JSON.stringify(data.goals || []));
+                        localStorage.setItem('assets', JSON.stringify(data.assets || []));
+                        localStorage.setItem('networthHistory', JSON.stringify(data.networthHistory || []));
+                        localStorage.setItem('dematHistory', JSON.stringify(data.dematHistory || []));
+                        localStorage.setItem('budgets', JSON.stringify(data.budgets || {}));
+                        localStorage.setItem('achievements', JSON.stringify(data.achievements || []));
+                        location.reload();
+                    }
+                } catch (err) {
+                    Utils.showNotif('Invalid backup file!', 'error');
+                }
+            };
+            reader.readAsText(file);
+        });
+
+        // Initialize
+        updateDashboard();
+        console.log('%c💰 MoneyFlow Ultimate v5.0', 'font-size: 20px; font-weight: bold; color: #667eea;');
+        console.log('%cCoded by: Reinhard son Sangma', 'font-size: 14px; color: #4a5568;');
+        console.log('%cNew: Assets, Stock Investment Tracker, Edit Budgets/Goals, About & Terms, CSV Reports', 'font-size: 12px; color: #667eea;');
+        console.log('%c2026 - All Rights Reserved', 'font-size: 12px; color: #a0aec0;');
+    </script>
+</body>
+</html>
